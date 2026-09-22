@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import id.mport.maps.BuildConfig
 import id.mport.maps.R
 import id.mport.maps.data.AppLanguage
 import id.mport.maps.domain.unit.UnitMode
@@ -174,21 +173,9 @@ fun SettingsScreen(
                 }
                 HorizontalDivider()
 
+                Spacer(Modifier.height(16.dp))
+                AppFooter()
                 Spacer(Modifier.height(24.dp))
-                Text(
-                    text = stringResource(R.string.version_line),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                Text(
-                    text = if (BuildConfig.HAS_MAPS_KEY)
-                        stringResource(R.string.api_key_ok)
-                    else
-                        stringResource(R.string.api_key_missing),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
-                )
-                Spacer(Modifier.height(32.dp))
             }
         }
     }

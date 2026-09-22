@@ -1,0 +1,91 @@
+cd ~/MPorT_Maps || exit 1
+
+echo "===== TOTAL RUNS ====="
+gh run list --limit 1000
+
+cd ~/MPorT_Maps || exit 1
+
+set -e
+
+OWNER_REPO=$(gh repo view --json nameWithOwner -q '.nameWithOwner')
+
+echo "Repository: $OWNER_REPO"
+
+# Simpan ID 2 Build sukses terbaru
+BUILD_KEEP=$(gh run list \
+  --workflow "Android Build" \
+  --status success \
+  --limit 1000 \
+  --json databaseId,createdAt \
+  --jq 'sort_by(.createdAt) | reverse | .[:2] | .[].databaseId')
+
+# Simpan ID 2 Release sukses terbaru
+RELEASE_KEEP=$(gh run list \
+  --workflow "Android Release" \
+  --status success \
+  --limit 1000 \
+  --json databaseId,createdAt \
+  --jq 'sort_by(.createdAt) | reverse | .[:2] | .[].databaseId')
+
+echo
+echo "BUILD KEEP:"
+echo "$BUILD_KEEP"
+
+echo
+echo "RELEASE KEEP:"
+echo "$RELEASE_KEEP"
+
+echo
+echo "===== HAPUS SEMUA RUN KECUALI 4 RUN DI ATAS ====="
+
+gh run list --limit 1000 \
+  --json databaseId,name,createdAt |
+jq -r '.[] | [.databaseId,.name,.createdAt] | @tsv' |
+while IFS=$'\t' read -r ID NAME CREATED; do
+
+    if echo "$BUILD_KEEP" | grep -qx "$ID"; then
+        echo "KEEP BUILD: $ID"
+        continue
+    fi
+
+    if echo "$RELEASE_KEEP" | grep -qx "$ID"; then
+        echo "KEEP RELEASE: $ID"
+        continue
+    fi
+
+    echo "DELETE: $ID | $NAME | $CREATED"
+    gh run delete "$ID" || true
+
+done
+
+echo
+echo "===== HAPUS ARTIFACT, SISAKAN 2 ====="
+
+gh api \
+  -H "Accept: application/vnd.github+json" \
+  "/repos/$OWNER_REPO/actions/artifacts?per_page=100" |
+jq -r '.artifacts | sort_by(.created_at) | reverse | .[2:][] | .id' |
+while read -r ID; do
+    [ -z "$ID" ] && continue
+
+    echo "DELETE ARTIFACT: $ID"
+
+    gh api \
+      --method DELETE \
+      -H "Accept: application/vnd.github+json" \
+      "/repos/$OWNER_REPO/actions/artifacts/$ID" || true
+done
+
+echo
+echo "===== HASIL ====="
+
+gh run list --limit 20
+
+echo
+echo "===== ARTIFACT TERSISA ====="
+
+gh api \
+  -H "Accept: application/vnd.github+json" \
+  "/repos/$OWNER_REPO/actions/artifacts?per_page=100" |
+jq -r '.artifacts[] |
+  "\(.id) | \(.name) | Run: \(.workflow_run.id) | \(.created_at)"'
