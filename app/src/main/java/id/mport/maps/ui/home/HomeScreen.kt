@@ -338,8 +338,13 @@ fun HomeScreen(
                         style = MaterialTheme.typography.bodySmall,
                         color = Color(0xFF616161)
                     )
+                    val keyLabel = if (BuildConfig.MAPS_API_KEY.isBlank()) {
+                        "(kosong)"
+                    } else {
+                        BuildConfig.MAPS_API_KEY.take(8) + "…"
+                    }
                     Text(
-                        "Key saat ini: ${if (BuildConfig.MAPS_API_KEY.isBlank()) \"(kosong)\" else BuildConfig.MAPS_API_KEY.take(8) + \"…\"}",
+                        text = "Key saat ini: $keyLabel",
                         style = MaterialTheme.typography.labelSmall,
                         color = Color(0xFF9E9E9E)
                     )
