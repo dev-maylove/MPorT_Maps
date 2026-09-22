@@ -217,16 +217,10 @@ fun HomeScreen(
                             )
                             DropdownMenuItem(
                                 text = {
-                                    Text(
-                                        if (unit == UnitMode.METRIC) "Satuan: Metric (m)"
-                                        else "Satuan: Imperial (ft)"
-                                    )
+                                    Text("Satuan: ${unit.label}")
                                 },
                                 onClick = {
-                                    vm.setUnit(
-                                        if (unit == UnitMode.METRIC) UnitMode.IMPERIAL
-                                        else UnitMode.METRIC
-                                    )
+                                    // Ubah satuan lewat Setelan → Units
                                     showMoreMenu = false
                                 },
                                 leadingIcon = { Icon(Icons.Default.Straighten, null) }

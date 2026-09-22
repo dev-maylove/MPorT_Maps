@@ -106,7 +106,7 @@ private fun SurveyCard(
     onExport: () -> Unit
 ) {
     val date = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(Date(survey.createdAt))
-    val unit = runCatching { UnitMode.valueOf(survey.unit) }.getOrDefault(UnitMode.METRIC)
+    val unit = UnitMode.fromStored(survey.unit)
     val points = PointCodec.decode(survey.pointsJson)
 
     Card(modifier = Modifier.fillMaxWidth()) {

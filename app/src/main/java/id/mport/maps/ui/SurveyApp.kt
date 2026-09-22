@@ -106,7 +106,11 @@ fun SurveyApp(vm: SurveyViewModel = viewModel()) {
                 )
                 2 -> MarkersScreen(padding = padding, vm = vm)
                 3 -> NotesScreen(padding = padding, vm = vm)
-                4 -> SettingsScreen(padding = padding, vm = vm)
+                4 -> SettingsScreen(
+                    padding = padding,
+                    vm = vm,
+                    onOpenHistory = { tab = 1 }
+                )
             }
         }
     }

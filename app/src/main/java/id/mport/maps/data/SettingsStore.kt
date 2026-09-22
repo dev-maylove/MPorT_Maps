@@ -13,7 +13,7 @@ private val Context.dataStore by preferencesDataStore("mport_maps_settings")
 
 data class AppSettings(
     val mapType: Int = 2,          // 1=Normal 2=Satellite 3=Terrain 4=Hybrid
-    val unit: UnitMode = UnitMode.METRIC,
+    val unit: UnitMode = UnitMode.METER,
     val darkTheme: Boolean = true
 )
 
@@ -25,8 +25,7 @@ class SettingsStore(private val context: Context) {
     val settings: Flow<AppSettings> = context.dataStore.data.map { prefs ->
         AppSettings(
             mapType = prefs[KEY_MAP] ?: 2,
-            unit = runCatching { UnitMode.valueOf(prefs[KEY_UNIT] ?: "METRIC") }
-                .getOrDefault(UnitMode.METRIC),
+            unit = UnitMode.fromStored(prefs[KEY_UNIT]),
             darkTheme = (prefs[KEY_THEME] ?: "DARK") == "DARK"
         )
     }

@@ -13,7 +13,7 @@ data class SurveyEntity(
     val areaSquareMeters: Double,
     val perimeterMeters: Double,
     val notes: String = "",
-    val unit: String = "METRIC",
+    val unit: String = "METER",
     val mapType: Int = 1,
     val createdAt: Long = System.currentTimeMillis()
 )
