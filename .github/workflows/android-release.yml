@@ -39,16 +39,44 @@ jobs:
             chmod +x ./gradlew
           fi
 
-      - name: Inject Maps API key
+      - name: Decode release keystore
         env:
-          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          if [ -n "$MAPS_API_KEY" ]; then
-            echo "MAPS_API_KEY=$MAPS_API_KEY" >> gradle.properties
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::KEYSTORE_BASE64 belum tersedia"
+            exit 1
           fi
 
-      - name: Build release APK (unsigned)
-        run: ./gradlew :app:assembleRelease --stacktrace --no-daemon
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release-keystore.jks"
+
+          test -s "$RUNNER_TEMP/release-keystore.jks"
+
+          echo "Keystore berhasil dipulihkan."
+
+      - name: Build signed release APK
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          KEYSTORE_FILE: ${{ runner.temp }}/release-keystore.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        run: |
+          if [ -z "$GOOGLE_MAPS_API_KEY" ]; then
+            echo "::error::GOOGLE_MAPS_API_KEY belum tersedia"
+            exit 1
+          fi
+
+          if [ -z "$KEYSTORE_PASSWORD" ]; then
+            echo "::error::KEYSTORE_PASSWORD belum tersedia"
+            exit 1
+          fi
+
+          if [ -z "$KEY_ALIAS" ]; then
+            echo "::error::KEY_ALIAS belum tersedia"
+            exit 1
+          fi
+
+          ./gradlew :app:assembleRelease             -PKEYSTORE_FILE="$KEYSTORE_FILE"             -PKEYSTORE_PASSWORD="$KEYSTORE_PASSWORD"             -PKEY_ALIAS="$KEY_ALIAS"             --stacktrace             --no-daemon
 
       - name: Upload release APK
         uses: actions/upload-artifact@v7

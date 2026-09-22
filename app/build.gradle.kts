@@ -25,6 +25,34 @@ android {
         manifestPlaceholders["MAPS_API_KEY"] = mapsKey
     }
 
+    signingConfigs {
+        create("release") {
+            val keystoreFile = project.findProperty("KEYSTORE_FILE")?.toString()
+            val keystorePassword = project.findProperty("KEYSTORE_PASSWORD")?.toString()
+            val keyAliasValue = project.findProperty("KEY_ALIAS")?.toString()
+
+            if (!keystoreFile.isNullOrBlank() &&
+                !keystorePassword.isNullOrBlank() &&
+                !keyAliasValue.isNullOrBlank()
+            ) {
+                storeFile = file(keystoreFile)
+                storePassword = keystorePassword
+                keyAlias = keyAliasValue
+                keyPassword = keystorePassword
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            val keystoreFile = project.findProperty("KEYSTORE_FILE")?.toString()
+
+            if (!keystoreFile.isNullOrBlank()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
