@@ -121,7 +121,7 @@ private fun SurveyCard(
             } else {
                 Text(stringResource(R.string.distance_label, UnitFormatter.distance(survey.distanceMeters, unit)))
             }
-            Text("${points.size} titik • $date")
+            Text(stringResource(R.string.points_count, points.size, date))
             if (survey.notes.isNotBlank()) Text(survey.notes)
             Row {
                 TextButton(onClick = onRestore) {
@@ -152,8 +152,8 @@ private fun ExportDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Export: ${survey.name}") },
-        text = { Text("Pilih format file. File disimpan ke Downloads/MPorT Maps.") },
+        title = { Text(stringResource(R.string.export_title, survey.name)) },
+        text = { Text(stringResource(R.string.export_hint)) },
         confirmButton = {
             Row {
                 TextButton(onClick = { onExport("csv") }) { Text("CSV") }

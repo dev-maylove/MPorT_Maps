@@ -32,7 +32,8 @@ private enum class SettingsPage { MAIN, ABOUT, PRIVACY, LICENSE, SECURITY }
 fun SettingsScreen(
     padding: PaddingValues,
     vm: SurveyViewModel,
-    onOpenHistory: (() -> Unit)? = null
+    onOpenHistory: (() -> Unit)? = null,
+    onSubPageChanged: ((onSubPage: Boolean, goBack: (() -> Unit)?) -> Unit)? = null
 ) {
     val settings by vm.settings.collectAsStateWithLifecycle()
     var page by remember { mutableStateOf(SettingsPage.MAIN) }
@@ -40,6 +41,21 @@ fun SettingsScreen(
     var showUnitDialog by remember { mutableStateOf(false) }
     var showLangDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
+    // Report nested page to parent for system Back handling
+    val goBackToMain: () -> Unit = remember {{ page = SettingsPage.MAIN }}
+    androidx.compose.runtime.LaunchedEffect(page) {
+        val onSub = page != SettingsPage.MAIN
+        onSubPageChanged?.invoke(onSub, if (onSub) goBackToMain else null)
+    }
+    androidx.compose.runtime.DisposableEffect(Unit) {
+        onDispose { onSubPageChanged?.invoke(false, null) }
+    }
+
+    // Hardware/gesture back while on About/Privacy/License/Security
+    androidx.activity.compose.BackHandler(enabled = page != SettingsPage.MAIN) {
+        page = SettingsPage.MAIN
+    }
 
     when (page) {
         SettingsPage.ABOUT -> AboutPage(
@@ -361,6 +377,7 @@ private fun LanguageDialog(
     )
 }
 
+
 @Composable
 private fun AboutPage(padding: PaddingValues, onBack: () -> Unit) {
     Column(
@@ -383,13 +400,68 @@ private fun AboutPage(padding: PaddingValues, onBack: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("MPorT Maps", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.about_version))
-            Text(stringResource(R.string.about_desc))
-            HorizontalDivider()
+            // App Information card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+                ),
+                shape = MaterialTheme.shapes.large
+            ) {
+                Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                    Text(
+                        stringResource(R.string.about_app_info),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    AboutInfoRow(stringResource(R.string.about_app_name_label), stringResource(R.string.about_app_display_name))
+                    AboutInfoRow(stringResource(R.string.about_version_label), stringResource(R.string.about_version_value))
+                    AboutInfoRow(stringResource(R.string.about_build_label), stringResource(R.string.about_build_value))
+                    AboutInfoRow(stringResource(R.string.about_platform_label), stringResource(R.string.about_platform_value))
+                }
+            }
+
+            // Developer card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+                ),
+                shape = MaterialTheme.shapes.large
+            ) {
+                Row(
+                    modifier = Modifier.padding(20.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.Person,
+                        contentDescription = null,
+                        modifier = Modifier.size(48.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    Column {
+                        Text(
+                            stringResource(R.string.about_developer_name),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            stringResource(R.string.about_developer_role),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
+            // Features summary
+            Text(stringResource(R.string.about_desc), style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.about_features_title), fontWeight = FontWeight.SemiBold)
             Text(stringResource(R.string.about_f1))
             Text(stringResource(R.string.about_f2))
@@ -401,11 +473,52 @@ private fun AboutPage(padding: PaddingValues, onBack: () -> Unit) {
             Text(stringResource(R.string.about_f8))
             Text(stringResource(R.string.about_f9))
             Text(stringResource(R.string.about_f10))
-            HorizontalDivider()
-            Text(stringResource(R.string.about_dev))
-            Text(stringResource(R.string.about_tagline))
-            Text(stringResource(R.string.about_local_data))
+            Text(stringResource(R.string.about_local_data), style = MaterialTheme.typography.bodySmall)
+
+            Spacer(Modifier.height(8.dp))
+            AppFooter()
+            Spacer(Modifier.height(24.dp))
         }
+    }
+}
+
+@Composable
+private fun AboutInfoRow(label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(value, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary)
+    }
+}
+
+@Composable
+fun AppFooter() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp))
+        Text(
+            stringResource(R.string.footer_app_name),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            stringResource(R.string.footer_copyright),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            stringResource(R.string.footer_made_with),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -453,6 +566,9 @@ private fun PrivacyPage(padding: PaddingValues, onBack: () -> Unit) {
             Text(stringResource(R.string.privacy_s6_body))
             Text(stringResource(R.string.privacy_s7), fontWeight = FontWeight.SemiBold)
             Text(stringResource(R.string.privacy_s7_body))
+            Spacer(Modifier.height(16.dp))
+            AppFooter()
+            // end Privacy
         }
     }
 }
@@ -501,6 +617,9 @@ private fun LicensePage(padding: PaddingValues, onBack: () -> Unit) {
             Text(stringResource(R.string.license_s7_body))
             Text(stringResource(R.string.license_s8), fontWeight = FontWeight.SemiBold)
             Text(stringResource(R.string.license_s8_body))
+            Spacer(Modifier.height(16.dp))
+            AppFooter()
+            // end License
         }
     }
 }
@@ -546,6 +665,9 @@ private fun SecurityPage(padding: PaddingValues, onBack: () -> Unit) {
             Text(stringResource(R.string.security_s6_body))
             Text(stringResource(R.string.security_s7), fontWeight = FontWeight.SemiBold)
             Text(stringResource(R.string.security_s7_body))
+            Spacer(Modifier.height(16.dp))
+            AppFooter()
+            // end Security
         }
     }
 }

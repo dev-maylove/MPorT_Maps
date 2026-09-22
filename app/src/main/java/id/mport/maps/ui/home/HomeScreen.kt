@@ -1,5 +1,7 @@
 package id.mport.maps.ui.home
 
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,6 +11,7 @@ import androidx.compose.material.icons.automirrored.filled.Undo
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +47,7 @@ fun HomeScreen(
     permissionGranted: Boolean,
     requestPermission: () -> Unit
 ) {
+    val context = LocalContext.current
     val ui by vm.ui.collectAsStateWithLifecycle()
     val settings by vm.settings.collectAsStateWithLifecycle()
     val markers by vm.markers.collectAsStateWithLifecycle()
@@ -53,8 +57,20 @@ fun HomeScreen(
     var showMoreMenu by remember { mutableStateOf(false) }
     var showMarkerDialog by remember { mutableStateOf<LatLng?>(null) }
 
+    // Persist last camera so returning to Survey reuses view + nearby cached tiles
+    var savedLat by rememberSaveable { mutableStateOf(-6.1754) }
+    var savedLng by rememberSaveable { mutableStateOf(106.8272) }
+    var savedZoom by rememberSaveable { mutableFloatStateOf(11f) }
     val camera = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(-6.1754, 106.8272), 11f)
+        position = CameraPosition.fromLatLngZoom(LatLng(savedLat, savedLng), savedZoom)
+    }
+    LaunchedEffect(camera.isMoving) {
+        if (!camera.isMoving) {
+            val pos = camera.position
+            savedLat = pos.target.latitude
+            savedLng = pos.target.longitude
+            savedZoom = pos.zoom
+        }
     }
 
     // Animate camera when GPS / restore sets focus
@@ -82,7 +98,10 @@ fun HomeScreen(
             cameraPositionState = camera,
             properties = MapProperties(
                 mapType = mapType,
-                isMyLocationEnabled = permissionGranted
+                isMyLocationEnabled = permissionGranted,
+                isBuildingEnabled = false,
+                isIndoorEnabled = false,
+                isTrafficEnabled = false,
             ),
             uiSettings = MapUiSettings(
                 compassEnabled = true,
@@ -90,7 +109,9 @@ fun HomeScreen(
                 myLocationButtonEnabled = false,
                 mapToolbarEnabled = false,
                 rotationGesturesEnabled = true,
-                tiltGesturesEnabled = true
+                tiltGesturesEnabled = false,
+                indoorLevelPickerEnabled = false,
+                scrollGesturesEnabledDuringRotateOrZoom = true
             ),
             onMapClick = { latLng ->
                 vm.addLatLng(latLng.latitude, latLng.longitude)
@@ -104,7 +125,7 @@ fun HomeScreen(
                 key("pt-$i-${p.latitude}-${p.longitude}") {
                     Marker(
                         state = rememberMarkerState(position = LatLng(p.latitude, p.longitude)),
-                        title = "Titik ${i + 1}"
+                        title = stringResource(R.string.point_n, i + 1)
                     )
                 }
             }
@@ -155,7 +176,7 @@ fun HomeScreen(
                         IconButton(onClick = { showMapMenu = true }) {
                             Icon(
                                 Icons.Default.Public,
-                                contentDescription = "Tipe peta",
+                                contentDescription = stringResource(R.string.cd_map_type),
                                 tint = Color(0xFF1565C0)
                             )
                         }
@@ -188,16 +209,16 @@ fun HomeScreen(
                     Spacer(Modifier.weight(1f))
 
                     IconButton(onClick = { vm.undo() }, enabled = ui.canUndo) {
-                        Icon(Icons.AutoMirrored.Filled.Undo, contentDescription = "Undo")
+                        Icon(Icons.AutoMirrored.Filled.Undo, contentDescription = stringResource(R.string.cd_undo))
                     }
                     IconButton(onClick = { vm.redo() }, enabled = ui.canRedo) {
-                        Icon(Icons.AutoMirrored.Filled.Redo, contentDescription = "Redo")
+                        Icon(Icons.AutoMirrored.Filled.Redo, contentDescription = stringResource(R.string.cd_redo))
                     }
                     IconButton(
                         onClick = { showSave = true },
                         enabled = ui.points.isNotEmpty()
                     ) {
-                        Icon(Icons.Default.Save, contentDescription = "Simpan")
+                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.save))
                     }
 
                     Box {
@@ -264,13 +285,13 @@ fun HomeScreen(
                     FilterChip(
                         selected = ui.mode == MeasurementMode.DISTANCE,
                         onClick = { vm.setMode(MeasurementMode.DISTANCE) },
-                        label = { Text("Jarak", fontSize = 12.sp) },
+                        label = { Text(stringResource(R.string.mode_distance), fontSize = 12.sp) },
                         modifier = Modifier.height(32.dp)
                     )
                     FilterChip(
                         selected = ui.mode == MeasurementMode.AREA,
                         onClick = { vm.setMode(MeasurementMode.AREA) },
-                        label = { Text("Area", fontSize = 12.sp) },
+                        label = { Text(stringResource(R.string.mode_area), fontSize = 12.sp) },
                         modifier = Modifier.height(32.dp)
                     )
                     Spacer(Modifier.weight(1f))
@@ -288,7 +309,7 @@ fun HomeScreen(
                             overflow = TextOverflow.Ellipsis
                         )
                         Text(
-                            "${ui.points.size} titik",
+                            stringResource(R.string.points_short, ui.points.size),
                             style = MaterialTheme.typography.labelSmall,
                             color = Color.Gray
                         )
@@ -314,33 +335,28 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(
-                        "Peta belum dikonfigurasi",
+                        stringResource(R.string.map_not_configured),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFFB71C1C)
                     )
                     Text(
-                        "Google Maps memerlukan API key. Tanpa key, layar akan berwarna beige/kosong.",
+                        stringResource(R.string.map_key_needed),
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color(0xFF424242)
                     )
                     Text(
-                        "Cara cepat:\n" +
-                        "1. Buka Google Cloud Console → Maps SDK for Android\n" +
-                        "2. Buat API key, batasi ke package id.mport.maps\n" +
-                        "3. Isi di gradle.properties:\n" +
-                        "   MAPS_API_KEY=AIza...\n" +
-                        "4. Rebuild aplikasi (Sync + Run)",
+                        stringResource(R.string.map_key_howto),
                         style = MaterialTheme.typography.bodySmall,
                         color = Color(0xFF616161)
                     )
                     val keyLabel = if (BuildConfig.MAPS_API_KEY.isBlank()) {
-                        "(kosong)"
+                        stringResource(R.string.key_empty)
                     } else {
                         BuildConfig.MAPS_API_KEY.take(8) + "…"
                     }
                     Text(
-                        text = "Key saat ini: $keyLabel",
+                        text = stringResource(R.string.map_key_current, keyLabel),
                         style = MaterialTheme.typography.labelSmall,
                         color = Color(0xFF9E9E9E)
                     )
@@ -361,7 +377,7 @@ fun HomeScreen(
                 ) {
                     CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
                     Text(
-                        "Memuat peta…",
+                        stringResource(R.string.map_loading),
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color(0xFF424242)
                     )
@@ -380,7 +396,7 @@ fun HomeScreen(
         ) {
             ToolFab(
                 icon = Icons.Default.MyLocation,
-                contentDescription = "Lokasi GPS",
+                contentDescription = stringResource(R.string.cd_gps),
                 onClick = {
                     if (permissionGranted) vm.locate() else requestPermission()
                 },
@@ -389,15 +405,45 @@ fun HomeScreen(
                 contentColor = Color(0xFF424242)
             )
             ToolFab(
+                icon = Icons.Default.Share,
+                contentDescription = stringResource(R.string.cd_share),
+                onClick = {
+                    val pt = ui.points.lastOrNull()
+                    if (pt == null) {
+                        android.widget.Toast.makeText(
+                            context,
+                            context.getString(R.string.share_no_location),
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        val body = context.getString(
+                            R.string.share_location_text,
+                            pt.latitude,
+                            pt.longitude
+                        )
+                        val intent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, body)
+                            putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.share_location))
+                        }
+                        context.startActivity(
+                            Intent.createChooser(intent, context.getString(R.string.share_location))
+                        )
+                    }
+                },
+                containerColor = Color(0xFFF5F5F5),
+                contentColor = Color(0xFF1565C0)
+            )
+            ToolFab(
                 icon = Icons.Default.PushPin,
-                contentDescription = "Tambah marker (long-press peta)",
+                contentDescription = stringResource(R.string.cd_marker),
                 onClick = { /* hint: long-press map */ },
                 containerColor = Color(0xFFFFEB3B),
                 contentColor = Color(0xFF212121)
             )
             ToolFab(
                 icon = Icons.Default.Edit,
-                contentDescription = "Mode ukur",
+                contentDescription = stringResource(R.string.cd_measure_mode),
                 onClick = {
                     vm.setMode(
                         if (ui.mode == MeasurementMode.DISTANCE) MeasurementMode.AREA
@@ -409,7 +455,7 @@ fun HomeScreen(
             )
             ToolFab(
                 icon = Icons.Default.Timeline,
-                contentDescription = "Clear titik",
+                contentDescription = stringResource(R.string.cd_clear_points),
                 onClick = { vm.clearPoints() },
                 containerColor = Color(0xFFF5F5F5),
                 contentColor = Color(0xFF424242)
@@ -417,6 +463,31 @@ fun HomeScreen(
         }
 
         // Bottom hint (only when empty)
+
+        // ── Undo / Redo above zoom controls (+) ──
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 10.dp, bottom = 100.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ToolFab(
+                icon = Icons.AutoMirrored.Filled.Undo,
+                contentDescription = stringResource(R.string.cd_undo),
+                onClick = { if (ui.canUndo) vm.undo() },
+                containerColor = if (ui.canUndo) Color(0xFFF5F5F5) else Color(0xFFE0E0E0),
+                contentColor = if (ui.canUndo) Color(0xFF424242) else Color(0xFF9E9E9E)
+            )
+            ToolFab(
+                icon = Icons.AutoMirrored.Filled.Redo,
+                contentDescription = stringResource(R.string.cd_redo),
+                onClick = { if (ui.canRedo) vm.redo() },
+                containerColor = if (ui.canRedo) Color(0xFFF5F5F5) else Color(0xFFE0E0E0),
+                contentColor = if (ui.canRedo) Color(0xFF424242) else Color(0xFF9E9E9E)
+            )
+        }
+
+
         if (ui.points.isEmpty() && ui.message == null) {
             Surface(
                 modifier = Modifier
@@ -428,7 +499,7 @@ fun HomeScreen(
                 shadowElevation = 2.dp
             ) {
                 Text(
-                    "Ketuk peta = titik ukur  ·  Long-press = marker",
+                    stringResource(R.string.map_hint),
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
                     style = MaterialTheme.typography.bodySmall,
                     color = Color(0xFF616161)
@@ -443,7 +514,7 @@ fun HomeScreen(
                     .padding(16.dp)
                     .padding(bottom = 40.dp),
                 action = {
-                    TextButton(onClick = { vm.clearMessage() }) { Text("OK") }
+                    TextButton(onClick = { vm.clearMessage() }) { Text(stringResource(R.string.ok)) }
                 }
             ) { Text(msg) }
         }
@@ -505,27 +576,27 @@ private fun SaveDialog(onDismiss: () -> Unit, onSave: (String, String) -> Unit) 
     var notes by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Simpan Survey") },
+        title = { Text(stringResource(R.string.save_survey_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Nama") },
+                    label = { Text(stringResource(R.string.name)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text("Catatan") },
+                    label = { Text(stringResource(R.string.notes)) },
                     minLines = 3,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
         },
-        confirmButton = { TextButton(onClick = { onSave(name, notes) }) { Text("Simpan") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Batal") } }
+        confirmButton = { TextButton(onClick = { onSave(name, notes) }) { Text(stringResource(R.string.save)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
 }
 
@@ -539,26 +610,26 @@ private fun MarkerDialog(
     var notes by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Tambah Marker") },
+        title = { Text(stringResource(R.string.add_marker_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("%.6f, %.6f".format(latLng.latitude, latLng.longitude))
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Judul") },
+                    label = { Text(stringResource(R.string.title)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text("Catatan") },
+                    label = { Text(stringResource(R.string.notes)) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
         },
-        confirmButton = { TextButton(onClick = { onSave(title, notes) }) { Text("Simpan") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Batal") } }
+        confirmButton = { TextButton(onClick = { onSave(title, notes) }) { Text(stringResource(R.string.save)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
 }

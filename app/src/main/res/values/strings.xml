@@ -171,4 +171,66 @@
     <string name="security_s7">7. Reporting issues</string>
     <string name="security_s7_body">If you discover a security concern, please contact the MPorT Maps developer with details so it can be investigated.</string>
 
+
+    <!-- Home / dialogs -->
+    <string name="save_survey_title">Save Survey</string>
+    <string name="name">Name</string>
+    <string name="add_marker_title">Add Marker</string>
+    <string name="point_n">Point %1$d</string>
+    <string name="markers_hint">Long-press the Survey map to add a marker.</string>
+    <string name="points_count">%1$d points • %2$s</string>
+    <string name="export_title">Export: %1$s</string>
+    <string name="export_hint">Choose file format. Files are saved to Downloads/MPorT Maps.</string>
+    <string name="default_note">Note</string>
+    <string name="default_marker">Marker</string>
+    <string name="survey_distance_default">Distance Survey</string>
+    <string name="survey_area_default">Area Survey</string>
+
+    <!-- About app info (card style) -->
+    <string name="about_app_info">App Information</string>
+    <string name="about_app_name_label">App name</string>
+    <string name="about_version_label">Version</string>
+    <string name="about_build_label">Build</string>
+    <string name="about_platform_label">Platform</string>
+    <string name="about_platform_value">Android</string>
+    <string name="about_developer_name">DeV_MaYLoVe</string>
+    <string name="about_developer_role">Developer &amp; Technology</string>
+    <string name="about_app_display_name">MPorT Maps</string>
+    <string name="about_version_value">1.2.0</string>
+    <string name="about_build_value">12</string>
+
+    <!-- Footer -->
+    <string name="footer_app_name">MPorT Maps</string>
+    <string name="footer_copyright">© 2026 MPorT. All rights reserved.</string>
+    <string name="footer_made_with">Made with ❤️ in Kincir Tengah</string>
+
+    <!-- VM messages -->
+    <string name="msg_gps_failed">GPS could not get location. Make sure GPS is on and location permission is granted.</string>
+    <string name="msg_no_points">No points to save</string>
+    <string name="msg_survey_saved">Survey saved</string>
+    <string name="msg_survey_opened">Survey opened: %1$s</string>
+    <string name="msg_save_failed">Failed to save: %1$s</string>
+
+
+    <string name="points_short">%1$d points</string>
+    <string name="map_hint">Tap map = measure point  ·  Long-press = marker</string>
+    <string name="map_loading">Loading map…</string>
+    <string name="map_not_configured">Map not configured</string>
+    <string name="map_key_needed">Google Maps requires an API key. Without a key, the screen may be empty or beige.</string>
+    <string name="map_key_howto">Quick setup:\n1. Open Google Cloud Console → Maps SDK for Android\n2. Create an API key, restrict to package id.mport.maps\n3. Set in gradle.properties:\n   MAPS_API_KEY=AIza…\n4. Rebuild the app (Sync + Run)</string>
+    <string name="map_key_current">Current key: %1$s</string>
+    <string name="key_empty">(empty)</string>
+    <string name="share_location">Share location</string>
+    <string name="share_location_text">My location: %1$.6f, %2$.6f\nhttps://maps.google.com/?q=%1$.6f,%2$.6f</string>
+    <string name="share_no_location">No location available to share</string>
+    <string name="cd_map_type">Map type</string>
+    <string name="cd_gps">GPS location</string>
+    <string name="cd_marker">Add marker (long-press map)</string>
+    <string name="cd_measure_mode">Measure mode</string>
+    <string name="cd_clear_points">Clear points</string>
+    <string name="cd_share">Share location</string>
+    <string name="cd_undo">Undo</string>
+    <string name="cd_redo">Redo</string>
+
+    <string name="press_back_again_exit">Press back again to exit</string>
 </resources>

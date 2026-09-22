@@ -171,4 +171,66 @@
     <string name="security_s7">7. Melaporkan masalah</string>
     <string name="security_s7_body">Jika menemukan masalah keamanan, hubungi pengembang MPorT Maps dengan detail agar dapat ditindaklanjuti.</string>
 
+
+    <!-- Home / dialogs -->
+    <string name="save_survey_title">Simpan Survey</string>
+    <string name="name">Nama</string>
+    <string name="add_marker_title">Tambah Marker</string>
+    <string name="point_n">Titik %1$d</string>
+    <string name="markers_hint">Long-press di peta Survey untuk menambah marker.</string>
+    <string name="points_count">%1$d titik • %2$s</string>
+    <string name="export_title">Ekspor: %1$s</string>
+    <string name="export_hint">Pilih format file. File disimpan ke Downloads/MPorT Maps.</string>
+    <string name="default_note">Catatan</string>
+    <string name="default_marker">Marker</string>
+    <string name="survey_distance_default">Survey Jarak</string>
+    <string name="survey_area_default">Survey Area</string>
+
+    <!-- About app info -->
+    <string name="about_app_info">Informasi Aplikasi</string>
+    <string name="about_app_name_label">Nama aplikasi</string>
+    <string name="about_version_label">Versi</string>
+    <string name="about_build_label">Build</string>
+    <string name="about_platform_label">Platform</string>
+    <string name="about_platform_value">Android</string>
+    <string name="about_developer_name">DeV_MaYLoVe</string>
+    <string name="about_developer_role">Developer &amp; Technology</string>
+    <string name="about_app_display_name">MPorT Maps</string>
+    <string name="about_version_value">1.2.0</string>
+    <string name="about_build_value">12</string>
+
+    <!-- Footer -->
+    <string name="footer_app_name">MPorT Maps</string>
+    <string name="footer_copyright">© 2026 MPorT. All rights reserved.</string>
+    <string name="footer_made_with">Made with ❤️ in Kincir Tengah</string>
+
+    <!-- VM messages -->
+    <string name="msg_gps_failed">GPS tidak mendapatkan lokasi. Pastikan GPS aktif dan izin lokasi diberikan.</string>
+    <string name="msg_no_points">Tidak ada titik untuk disimpan</string>
+    <string name="msg_survey_saved">Survey tersimpan</string>
+    <string name="msg_survey_opened">Survey dibuka: %1$s</string>
+    <string name="msg_save_failed">Gagal menyimpan: %1$s</string>
+
+
+    <string name="points_short">%1$d titik</string>
+    <string name="map_hint">Ketuk peta = titik ukur  ·  Long-press = marker</string>
+    <string name="map_loading">Memuat peta…</string>
+    <string name="map_not_configured">Peta belum dikonfigurasi</string>
+    <string name="map_key_needed">Google Maps memerlukan API key. Tanpa key, layar bisa kosong atau berwarna beige.</string>
+    <string name="map_key_howto">Cara cepat:\n1. Buka Google Cloud Console → Maps SDK for Android\n2. Buat API key, batasi ke package id.mport.maps\n3. Isi di gradle.properties:\n   MAPS_API_KEY=AIza…\n4. Rebuild aplikasi (Sync + Run)</string>
+    <string name="map_key_current">Key saat ini: %1$s</string>
+    <string name="key_empty">(kosong)</string>
+    <string name="share_location">Bagikan lokasi</string>
+    <string name="share_location_text">Lokasi saya: %1$.6f, %2$.6f\nhttps://maps.google.com/?q=%1$.6f,%2$.6f</string>
+    <string name="share_no_location">Tidak ada lokasi untuk dibagikan</string>
+    <string name="cd_map_type">Tipe peta</string>
+    <string name="cd_gps">Lokasi GPS</string>
+    <string name="cd_marker">Tambah marker (long-press peta)</string>
+    <string name="cd_measure_mode">Mode ukur</string>
+    <string name="cd_clear_points">Hapus titik</string>
+    <string name="cd_share">Bagikan lokasi</string>
+    <string name="cd_undo">Undo</string>
+    <string name="cd_redo">Redo</string>
+
+    <string name="press_back_again_exit">Tekan kembali lagi untuk keluar</string>
 </resources>

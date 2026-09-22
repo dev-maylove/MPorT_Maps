@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -67,7 +68,7 @@ private fun NoteCard(note: NoteEntity, onDelete: () -> Unit) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(note.title, style = MaterialTheme.typography.titleMedium)
                 IconButton(onClick = onDelete) {
-                    Icon(Icons.Default.Delete, contentDescription = "Hapus")
+                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete))
                 }
             }
             Text(note.body)
@@ -80,6 +81,7 @@ private fun NoteCard(note: NoteEntity, onDelete: () -> Unit) {
 private fun AddNoteDialog(onDismiss: () -> Unit, onSave: (String, String) -> Unit) {
     var title by remember { mutableStateOf("") }
     var body by remember { mutableStateOf("") }
+    val defaultTitle = stringResource(R.string.default_note)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.add_note)) },
@@ -91,7 +93,7 @@ private fun AddNoteDialog(onDismiss: () -> Unit, onSave: (String, String) -> Uni
         },
         confirmButton = {
             TextButton(
-                onClick = { onSave(title.ifBlank { "Catatan" }, body) },
+                onClick = { onSave(title.ifBlank { defaultTitle }, body) },
                 enabled = body.isNotBlank()
             ) { Text(stringResource(R.string.save)) }
         },

@@ -30,7 +30,7 @@ fun MarkersScreen(padding: PaddingValues, vm: SurveyViewModel) {
             .padding(16.dp)
     ) {
         Text(stringResource(R.string.markers_title), style = MaterialTheme.typography.headlineSmall)
-        Text("Long-press di peta Survey untuk menambah marker.")
+        Text(stringResource(R.string.markers_hint))
         Spacer(Modifier.height(12.dp))
         if (markers.isEmpty()) {
             Text(stringResource(R.string.markers_empty))
@@ -52,7 +52,7 @@ private fun MarkerCard(marker: MarkerEntity, onDelete: () -> Unit) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(marker.title, style = MaterialTheme.typography.titleMedium)
                 IconButton(onClick = onDelete) {
-                    Icon(Icons.Default.Delete, contentDescription = "Hapus")
+                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete))
                 }
             }
             Text("%.6f, %.6f".format(marker.latitude, marker.longitude))

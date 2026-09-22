@@ -2,8 +2,13 @@ package id.mport.maps.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Map
@@ -12,6 +17,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.StickyNote2
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
@@ -30,7 +36,11 @@ import id.mport.maps.viewmodel.SurveyViewModel
 fun SurveyApp(vm: SurveyViewModel = viewModel()) {
     var tab by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
+    val activity = context as? ComponentActivity
     val settings by vm.settings.collectAsStateWithLifecycle()
+
+    var settingsOnSubPage by remember { mutableStateOf(false) }
+    var settingsGoBack by remember { mutableStateOf<(() -> Unit)?>(null) }
 
     var permissionGranted by remember {
         mutableStateOf(
@@ -47,6 +57,25 @@ fun SurveyApp(vm: SurveyViewModel = viewModel()) {
         permissionGranted =
             result[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
             result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+    }
+
+    var lastBackMs by remember { mutableLongStateOf(0L) }
+    val exitHint = stringResource(R.string.press_back_again_exit)
+
+    BackHandler(enabled = true) {
+        when {
+            tab == 4 && settingsOnSubPage -> settingsGoBack?.invoke()
+            tab != 0 -> tab = 0
+            else -> {
+                val now = System.currentTimeMillis()
+                if (now - lastBackMs < 2000L) {
+                    activity?.finish()
+                } else {
+                    lastBackMs = now
+                    Toast.makeText(context, exitHint, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     MPorTSurveyTheme(darkTheme = settings.darkTheme) {
@@ -86,8 +115,10 @@ fun SurveyApp(vm: SurveyViewModel = viewModel()) {
                 }
             }
         ) { padding ->
-            when (tab) {
-                0 -> HomeScreen(
+            // Keep map composition alive under other tabs so Maps SDK tile cache / GL
+            // context are reused (better offline tile reuse when returning to Survey).
+            Box(Modifier.fillMaxSize()) {
+                HomeScreen(
                     padding = padding,
                     vm = vm,
                     permissionGranted = permissionGranted,
@@ -100,18 +131,32 @@ fun SurveyApp(vm: SurveyViewModel = viewModel()) {
                         )
                     }
                 )
-                1 -> HistoryScreen(
-                    padding = padding,
-                    vm = vm,
-                    onOpenSurvey = { tab = 0 }
-                )
-                2 -> MarkersScreen(padding = padding, vm = vm)
-                3 -> NotesScreen(padding = padding, vm = vm)
-                4 -> SettingsScreen(
-                    padding = padding,
-                    vm = vm,
-                    onOpenHistory = { tab = 1 }
-                )
+
+                if (tab != 0) {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        when (tab) {
+                            1 -> HistoryScreen(
+                                padding = padding,
+                                vm = vm,
+                                onOpenSurvey = { tab = 0 }
+                            )
+                            2 -> MarkersScreen(padding = padding, vm = vm)
+                            3 -> NotesScreen(padding = padding, vm = vm)
+                            4 -> SettingsScreen(
+                                padding = padding,
+                                vm = vm,
+                                onOpenHistory = { tab = 1 },
+                                onSubPageChanged = { onSub, goBack ->
+                                    settingsOnSubPage = onSub
+                                    settingsGoBack = goBack
+                                }
+                            )
+                        }
+                    }
+                }
             }
         }
     }

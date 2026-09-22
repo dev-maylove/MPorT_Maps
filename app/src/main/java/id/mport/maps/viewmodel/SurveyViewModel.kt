@@ -3,6 +3,7 @@ package id.mport.maps.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import id.mport.maps.R
 import id.mport.maps.data.AppSettings
 import id.mport.maps.data.SettingsStore
 import id.mport.maps.data.database.SurveyDatabase
@@ -110,7 +111,7 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
                 _ui.update {
                     it.copy(
                         gpsLoading = false,
-                        message = "GPS tidak mendapatkan lokasi. Pastikan GPS aktif & izin lokasi."
+                        message = getApplication<Application>().getString(R.string.msg_gps_failed)
                     )
                 }
             } else {
@@ -133,7 +134,7 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
     fun saveSurvey(name: String, notes: String) {
         val s = _ui.value
         if (s.points.isEmpty()) {
-            _ui.update { it.copy(message = "Tidak ada titik untuk disimpan") }
+            _ui.update { it.copy(message = getApplication<Application>().getString(R.string.msg_no_points)) }
             return
         }
         viewModelScope.launch {
@@ -143,7 +144,7 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
                 repo.saveSurvey(
                     SurveyEntity(
                         name = name.ifBlank {
-                            if (s.mode == MeasurementMode.AREA) "Survey Area" else "Survey Jarak"
+                            if (s.mode == MeasurementMode.AREA) getApplication<Application>().getString(R.string.survey_area_default) else getApplication<Application>().getString(R.string.survey_distance_default)
                         },
                         mode = s.mode.name,
                         pointsJson = PointCodec.encode(s.points),
@@ -158,7 +159,7 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
             }
             if (result.isFailure) {
                 _ui.update {
-                    it.copy(message = "Gagal menyimpan: ${result.exceptionOrNull()?.message ?: "error"}")
+                    it.copy(message = getApplication<Application>().getString(R.string.msg_save_failed, result.exceptionOrNull()?.message ?: "error"))
                 }
                 return@launch
             }
@@ -172,7 +173,7 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
                     perimeterMeters = 0.0,
                     canUndo = false,
                     canRedo = false,
-                    message = "Survey tersimpan",
+                    message = getApplication<Application>().getString(R.string.msg_survey_saved),
                     savedOk = true
                 )
             }
@@ -191,7 +192,7 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             repo.saveMarker(
                 MarkerEntity(
-                    title = title.ifBlank { "Marker" },
+                    title = title.ifBlank { getApplication<Application>().getString(R.string.default_marker) },
                     latitude = lat,
                     longitude = lng,
                     notes = notes
@@ -246,7 +247,7 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
                 perimeterMeters = survey.perimeterMeters,
                 canUndo = false,
                 canRedo = false,
-                message = "Survey dibuka: ${survey.name}",
+                message = getApplication<Application>().getString(R.string.msg_survey_opened, survey.name),
                 focusLatLng = focus
             )
         }
