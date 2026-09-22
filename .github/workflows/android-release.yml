@@ -105,9 +105,14 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          if [ -z "$KEYSTORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ] || [ -z "$KEY_PASSWORD" ]; then
-            echo "::error::Missing KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD secrets."
+          if [ -z "$KEYSTORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ]; then
+            echo "::error::Missing KEYSTORE_PASSWORD or KEY_ALIAS secrets."
             exit 1
+          fi
+          # Many keystores use the same password for store + key
+          if [ -z "$KEY_PASSWORD" ]; then
+            echo "KEY_PASSWORD empty — falling back to KEYSTORE_PASSWORD"
+            export KEY_PASSWORD="$KEYSTORE_PASSWORD"
           fi
           gradle :app:assembleRelease :app:bundleRelease \
             -PversionName="${{ steps.version.outputs.version_name }}" \

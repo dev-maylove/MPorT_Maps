@@ -38,9 +38,11 @@ android {
                 ?: project.findProperty("KEYSTORE_PASSWORD")?.toString()
             val alias = System.getenv("KEY_ALIAS")
                 ?: project.findProperty("KEY_ALIAS")?.toString()
-            val keyPass = System.getenv("KEY_PASSWORD")
-                ?: project.findProperty("KEY_PASSWORD")?.toString()
-                ?: storePass
+            val keyPass = listOf(
+                System.getenv("KEY_PASSWORD"),
+                project.findProperty("KEY_PASSWORD")?.toString(),
+                storePass
+            ).firstOrNull { !it.isNullOrBlank() }
 
             if (!keystorePath.isNullOrBlank() &&
                 !storePass.isNullOrBlank() &&
