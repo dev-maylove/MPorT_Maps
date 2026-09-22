@@ -13,43 +13,62 @@ android {
         applicationId = "id.mport.maps"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.1.1"
+
+        // Allow CI to inject version via -PversionName / -PversionCode
+        versionCode = (project.findProperty("versionCode") as String?)?.toIntOrNull() ?: 1
+        versionName = (project.findProperty("versionName") as String?) ?: "1.2.0"
+
         vectorDrawables { useSupportLibrary = true }
 
-        // Maps API key from GitHub Actions or gradle.properties
         val mapsKey = System.getenv("GOOGLE_MAPS_API_KEY")
             ?: project.findProperty("MAPS_API_KEY")?.toString()
             ?: ""
-
         manifestPlaceholders["MAPS_API_KEY"] = mapsKey
+        // BuildConfig so UI can detect missing key at runtime
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsKey\"")
+        val hasMapsKey = mapsKey.isNotBlank() && mapsKey != "YOUR_GOOGLE_MAPS_API_KEY"
+        buildConfigField("boolean", "HAS_MAPS_KEY", hasMapsKey.toString())
     }
 
     signingConfigs {
         create("release") {
-            val keystoreFile = project.findProperty("KEYSTORE_FILE")?.toString()
-            val keystorePassword = project.findProperty("KEYSTORE_PASSWORD")?.toString()
-            val keyAliasValue = project.findProperty("KEY_ALIAS")?.toString()
+            val keystorePath = System.getenv("KEYSTORE_PATH")
+                ?: project.findProperty("KEYSTORE_FILE")?.toString()
+            val storePass = System.getenv("KEYSTORE_PASSWORD")
+                ?: project.findProperty("KEYSTORE_PASSWORD")?.toString()
+            val alias = System.getenv("KEY_ALIAS")
+                ?: project.findProperty("KEY_ALIAS")?.toString()
+            val keyPass = System.getenv("KEY_PASSWORD")
+                ?: project.findProperty("KEY_PASSWORD")?.toString()
+                ?: storePass
 
-            if (!keystoreFile.isNullOrBlank() &&
-                !keystorePassword.isNullOrBlank() &&
-                !keyAliasValue.isNullOrBlank()
+            if (!keystorePath.isNullOrBlank() &&
+                !storePass.isNullOrBlank() &&
+                !alias.isNullOrBlank()
             ) {
-                storeFile = file(keystoreFile)
-                storePassword = keystorePassword
-                keyAlias = keyAliasValue
-                keyPassword = keystorePassword
+                storeFile = file(keystorePath)
+                storePassword = storePass
+                keyAlias = alias
+                keyPassword = keyPass
             }
         }
     }
 
     buildTypes {
         release {
-            val keystoreFile = project.findProperty("KEYSTORE_FILE")?.toString()
-
-            if (!keystoreFile.isNullOrBlank()) {
+            isMinifyEnabled = false
+            val hasKeystore = signingConfigs.getByName("release").storeFile != null
+            if (hasKeystore) {
                 signingConfig = signingConfigs.getByName("release")
             }
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
         }
     }
 
@@ -86,19 +105,16 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
-    // Maps + Location
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.google.maps.android:maps-compose:6.4.1")
     implementation("com.google.maps.android:android-maps-utils:3.10.0")
 
-    // Room
     val room = "2.6.1"
     implementation("androidx.room:room-runtime:$room")
     implementation("androidx.room:room-ktx:$room")
     ksp("androidx.room:room-compiler:$room")
 
-    // Coroutines + DataStore
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
     implementation("androidx.datastore:datastore-preferences:1.1.1")

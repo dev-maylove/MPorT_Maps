@@ -17,20 +17,57 @@ class LocationManager(context: Context) {
         val cts = CancellationTokenSource()
         cont.invokeOnCancellation { cts.cancel() }
 
+        fun resumeOnce(value: MeasurementPoint?) {
+            if (cont.isActive) cont.resume(value)
+        }
+
         client.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cts.token)
             .addOnSuccessListener { loc ->
-                cont.resume(
-                    loc?.let {
+                if (loc != null) {
+                    resumeOnce(
                         MeasurementPoint(
-                            latitude = it.latitude,
-                            longitude = it.longitude,
-                            accuracy = it.accuracy,
-                            altitude = it.altitude,
-                            bearing = it.bearing
+                            latitude = loc.latitude,
+                            longitude = loc.longitude,
+                            accuracy = loc.accuracy,
+                            altitude = loc.altitude,
+                            bearing = loc.bearing
+                        )
+                    )
+                } else {
+                    // Fallback: last known location
+                    client.lastLocation
+                        .addOnSuccessListener { last ->
+                            resumeOnce(
+                                last?.let {
+                                    MeasurementPoint(
+                                        latitude = it.latitude,
+                                        longitude = it.longitude,
+                                        accuracy = it.accuracy,
+                                        altitude = it.altitude,
+                                        bearing = it.bearing
+                                    )
+                                }
+                            )
+                        }
+                        .addOnFailureListener { resumeOnce(null) }
+                }
+            }
+            .addOnFailureListener {
+                client.lastLocation
+                    .addOnSuccessListener { last ->
+                        resumeOnce(
+                            last?.let {
+                                MeasurementPoint(
+                                    latitude = it.latitude,
+                                    longitude = it.longitude,
+                                    accuracy = it.accuracy,
+                                    altitude = it.altitude,
+                                    bearing = it.bearing
+                                )
+                            }
                         )
                     }
-                )
+                    .addOnFailureListener { resumeOnce(null) }
             }
-            .addOnFailureListener { cont.resume(null) }
     }
 }

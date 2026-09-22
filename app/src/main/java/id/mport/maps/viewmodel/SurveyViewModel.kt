@@ -26,7 +26,9 @@ data class SurveyUiState(
     val canRedo: Boolean = false,
     val gpsLoading: Boolean = false,
     val message: String? = null,
-    val savedOk: Boolean = false
+    val savedOk: Boolean = false,
+    /** When set, HomeScreen should animate camera here once then clear. */
+    val focusLatLng: Pair<Double, Double>? = null
 )
 
 class SurveyViewModel(app: Application) : AndroidViewModel(app) {
@@ -55,7 +57,12 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
     fun addPoint(point: MeasurementPoint) {
         pushUndo()
         redoStack.clear()
-        _ui.update { it.copy(points = it.points + point) }
+        _ui.update {
+            it.copy(
+                points = it.points + point,
+                focusLatLng = point.latitude to point.longitude
+            )
+        }
         recalculate()
     }
 
@@ -63,26 +70,34 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
         addPoint(MeasurementPoint(latitude = lat, longitude = lng))
     }
 
+    fun consumeFocus() {
+        _ui.update { it.copy(focusLatLng = null) }
+    }
+
+    /** Undo must work even when points are empty (e.g. after Clear). */
     fun undo() {
+        if (undoStack.isEmpty()) return
         val current = _ui.value.points
-        if (current.isEmpty()) return
         redoStack.addLast(current)
-        val previous = undoStack.removeLastOrNull() ?: emptyList()
+        val previous = undoStack.removeLast()
         _ui.update { it.copy(points = previous) }
         recalculate()
     }
 
     fun redo() {
-        val next = redoStack.removeLastOrNull() ?: return
+        if (redoStack.isEmpty()) return
+        val next = redoStack.removeLast()
         pushUndo()
         _ui.update { it.copy(points = next) }
         recalculate()
     }
 
     fun clearPoints() {
-        if (_ui.value.points.isEmpty()) return
-        pushUndo()
-        redoStack.clear()
+        if (_ui.value.points.isEmpty() && undoStack.isEmpty()) return
+        if (_ui.value.points.isNotEmpty()) {
+            pushUndo()
+            redoStack.clear()
+        }
         _ui.update { it.copy(points = emptyList()) }
         recalculate()
     }
@@ -95,38 +110,58 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
                 _ui.update {
                     it.copy(
                         gpsLoading = false,
-                        message = "GPS tidak mendapatkan lokasi. Pastikan GPS aktif."
+                        message = "GPS tidak mendapatkan lokasi. Pastikan GPS aktif & izin lokasi."
                     )
                 }
             } else {
-                addPoint(fix)
-                _ui.update { it.copy(gpsLoading = false, message = null) }
+                // addPoint already sets focus + recalculate
+                pushUndo()
+                redoStack.clear()
+                _ui.update {
+                    it.copy(
+                        points = it.points + fix,
+                        gpsLoading = false,
+                        message = null,
+                        focusLatLng = fix.latitude to fix.longitude
+                    )
+                }
+                recalculate()
             }
         }
     }
 
     fun saveSurvey(name: String, notes: String) {
         val s = _ui.value
-        if (s.points.isEmpty()) return
+        if (s.points.isEmpty()) {
+            _ui.update { it.copy(message = "Tidak ada titik untuk disimpan") }
+            return
+        }
         viewModelScope.launch {
             val unit = settings.value.unit
             val mapType = settings.value.mapType
-            repo.saveSurvey(
-                SurveyEntity(
-                    name = name.ifBlank {
-                        if (s.mode == MeasurementMode.AREA) "Survey Area" else "Survey Jarak"
-                    },
-                    mode = s.mode.name,
-                    pointsJson = PointCodec.encode(s.points),
-                    distanceMeters = s.distanceMeters,
-                    areaSquareMeters = s.areaSquareMeters,
-                    perimeterMeters = s.perimeterMeters,
-                    notes = notes,
-                    unit = unit.name,
-                    mapType = mapType
+            val result = runCatching {
+                repo.saveSurvey(
+                    SurveyEntity(
+                        name = name.ifBlank {
+                            if (s.mode == MeasurementMode.AREA) "Survey Area" else "Survey Jarak"
+                        },
+                        mode = s.mode.name,
+                        pointsJson = PointCodec.encode(s.points),
+                        distanceMeters = s.distanceMeters,
+                        areaSquareMeters = s.areaSquareMeters,
+                        perimeterMeters = s.perimeterMeters,
+                        notes = notes,
+                        unit = unit.name,
+                        mapType = mapType
+                    )
                 )
-            )
-            // Reset measurement state fully after successful save
+            }
+            if (result.isFailure) {
+                _ui.update {
+                    it.copy(message = "Gagal menyimpan: ${result.exceptionOrNull()?.message ?: "error"}")
+                }
+                return@launch
+            }
             undoStack.clear()
             redoStack.clear()
             _ui.update {
@@ -137,8 +172,8 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
                     perimeterMeters = 0.0,
                     canUndo = false,
                     canRedo = false,
-                    savedOk = true,
-                    message = "Survey berhasil disimpan"
+                    message = "Survey tersimpan",
+                    savedOk = true
                 )
             }
         }
@@ -155,7 +190,12 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
     fun saveMarker(title: String, lat: Double, lng: Double, notes: String = "") {
         viewModelScope.launch {
             repo.saveMarker(
-                MarkerEntity(title = title.ifBlank { "Marker" }, latitude = lat, longitude = lng, notes = notes)
+                MarkerEntity(
+                    title = title.ifBlank { "Marker" },
+                    latitude = lat,
+                    longitude = lng,
+                    notes = notes
+                )
             )
         }
     }
@@ -192,6 +232,7 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
             .getOrDefault(MeasurementMode.DISTANCE)
         undoStack.clear()
         redoStack.clear()
+        val focus = points.lastOrNull()?.let { it.latitude to it.longitude }
         _ui.update {
             it.copy(
                 mode = mode,
@@ -200,9 +241,13 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
                 areaSquareMeters = survey.areaSquareMeters,
                 perimeterMeters = survey.perimeterMeters,
                 canUndo = false,
-                canRedo = false
+                canRedo = false,
+                message = "Survey dibuka: ${survey.name}",
+                focusLatLng = focus
             )
         }
+        // Recompute in case stored numbers drift
+        recalculate()
     }
 
     private fun pushUndo() {
@@ -213,8 +258,12 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
     private fun recalculate() {
         val points = _ui.value.points
         val dist = DistanceCalculator.pathLength(points)
-        val area = if (_ui.value.mode == MeasurementMode.AREA) AreaCalculator.polygonArea(points) else 0.0
-        val peri = if (_ui.value.mode == MeasurementMode.AREA) AreaCalculator.perimeter(points) else dist
+        val area = if (_ui.value.mode == MeasurementMode.AREA) {
+            AreaCalculator.polygonArea(points)
+        } else 0.0
+        val peri = if (_ui.value.mode == MeasurementMode.AREA) {
+            AreaCalculator.perimeter(points)
+        } else dist
         _ui.update {
             it.copy(
                 distanceMeters = dist,

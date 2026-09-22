@@ -1,0 +1,74 @@
+name: Android Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-debug:
+    name: Build Debug APK
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+          check-latest: true
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: "platform-tools platforms;android-35 build-tools;35.0.0"
+
+      # AGP 8.7.3 requires Gradle ≥ 8.9
+      - name: Set up Gradle 8.9
+        run: |
+          curl -fsSL https://services.gradle.org/distributions/gradle-8.9-bin.zip -o /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /opt
+          echo "/opt/gradle-8.9/bin" >> "$GITHUB_PATH"
+
+      - name: Set up Gradle build cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Inject Maps API key (optional)
+        env:
+          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: |
+          KEY="${MAPS_API_KEY:-$GOOGLE_MAPS_API_KEY}"
+          if [ -n "$KEY" ]; then
+            echo "MAPS_API_KEY=$KEY" >> gradle.properties
+            echo "Maps API key injected"
+          else
+            echo "No Maps API key secret — placeholder"
+          fi
+
+      - name: Show toolchain
+        run: |
+          java --version
+          gradle --version
+          echo "ANDROID_HOME=$ANDROID_HOME"
+
+      - name: Build Debug APK + Lint
+        run: gradle :app:assembleDebug :app:lintDebug --stacktrace --no-daemon
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: MPorT-Maps-Debug
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 7

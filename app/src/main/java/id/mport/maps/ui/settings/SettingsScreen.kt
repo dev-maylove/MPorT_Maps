@@ -88,6 +88,17 @@ fun SettingsScreen(padding: PaddingValues, vm: SurveyViewModel) {
         }
 
         HorizontalDivider()
+        
+        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+        Text("Google Maps", style = MaterialTheme.typography.titleSmall)
+        Text(
+            if (BuildConfig.HAS_MAPS_KEY)
+                "API key terpasang (${BuildConfig.MAPS_API_KEY.take(8)}…)"
+            else
+                "API key belum diisi — peta akan kosong. Isi MAPS_API_KEY di gradle.properties lalu rebuild.",
+            style = MaterialTheme.typography.bodySmall
+        )
+
         Text("MPorT Maps v1.1.1", style = MaterialTheme.typography.bodySmall)
         Text("Offline survey • GPS • Map measurement • Export", style = MaterialTheme.typography.bodySmall)
     }

@@ -19,9 +19,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import id.mport.maps.BuildConfig
 import id.mport.maps.domain.measurement.MeasurementMode
 import id.mport.maps.domain.unit.UnitFormatter
 import id.mport.maps.domain.unit.UnitMode
@@ -53,8 +55,19 @@ fun HomeScreen(
         position = CameraPosition.fromLatLngZoom(LatLng(-6.1754, 106.8272), 11f)
     }
 
+    // Animate camera when GPS / restore sets focus
+    LaunchedEffect(ui.focusLatLng) {
+        val focus = ui.focusLatLng ?: return@LaunchedEffect
+        val target = LatLng(focus.first, focus.second)
+        camera.animate(CameraUpdateFactory.newLatLngZoom(target, maxOf(camera.position.zoom, 16f)))
+        vm.consumeFocus()
+    }
+
     val mapType = MapTypeHelper.fromId(settings.mapType)
     val unit = settings.unit
+    var mapLoaded by remember { mutableStateOf(false) }
+    val missingMapsKey = !BuildConfig.HAS_MAPS_KEY
+
 
     Box(
         modifier = Modifier
@@ -82,7 +95,8 @@ fun HomeScreen(
             },
             onMapLongClick = { latLng ->
                 showMarkerDialog = latLng
-            }
+            },
+            onMapLoaded = { mapLoaded = true }
         ) {
             ui.points.forEachIndexed { i, p ->
                 key("pt-$i-${p.latitude}-${p.longitude}") {
@@ -251,37 +265,17 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    AssistChip(
+                    FilterChip(
+                        selected = ui.mode == MeasurementMode.DISTANCE,
                         onClick = { vm.setMode(MeasurementMode.DISTANCE) },
                         label = { Text("Jarak", fontSize = 12.sp) },
-                        colors = AssistChipDefaults.assistChipColors(
-                            containerColor = if (ui.mode == MeasurementMode.DISTANCE)
-                                MaterialTheme.colorScheme.primaryContainer
-                            else Color.Transparent
-                        ),
-                        border = AssistChipDefaults.assistChipBorder(
-                            enabled = true,
-                            borderColor = if (ui.mode == MeasurementMode.DISTANCE)
-                                MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
-                        ),
-                        modifier = Modifier.height(30.dp)
+                        modifier = Modifier.height(32.dp)
                     )
-                    AssistChip(
+                    FilterChip(
+                        selected = ui.mode == MeasurementMode.AREA,
                         onClick = { vm.setMode(MeasurementMode.AREA) },
                         label = { Text("Area", fontSize = 12.sp) },
-                        colors = AssistChipDefaults.assistChipColors(
-                            containerColor = if (ui.mode == MeasurementMode.AREA)
-                                MaterialTheme.colorScheme.secondaryContainer
-                            else Color.Transparent
-                        ),
-                        border = AssistChipDefaults.assistChipBorder(
-                            enabled = true,
-                            borderColor = if (ui.mode == MeasurementMode.AREA)
-                                MaterialTheme.colorScheme.secondary
-                            else MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
-                        ),
-                        modifier = Modifier.height(30.dp)
+                        modifier = Modifier.height(32.dp)
                     )
                     Spacer(Modifier.weight(1f))
                     Column(horizontalAlignment = Alignment.End) {
@@ -306,6 +300,74 @@ fun HomeScreen(
                 }
             }
         }
+
+
+        // ── Maps key / load status overlay ──
+        if (missingMapsKey) {
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(24.dp)
+                    .fillMaxWidth(0.92f),
+                shape = RoundedCornerShape(16.dp),
+                color = Color(0xF2FFFFFF),
+                shadowElevation = 6.dp
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        "Peta belum dikonfigurasi",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFB71C1C)
+                    )
+                    Text(
+                        "Google Maps memerlukan API key. Tanpa key, layar akan berwarna beige/kosong.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFF424242)
+                    )
+                    Text(
+                        "Cara cepat:\n" +
+                        "1. Buka Google Cloud Console → Maps SDK for Android\n" +
+                        "2. Buat API key, batasi ke package id.mport.maps\n" +
+                        "3. Isi di gradle.properties:\n" +
+                        "   MAPS_API_KEY=AIza...\n" +
+                        "4. Rebuild aplikasi (Sync + Run)",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFF616161)
+                    )
+                    Text(
+                        "Key saat ini: ${if (BuildConfig.MAPS_API_KEY.isBlank()) \"(kosong)\" else BuildConfig.MAPS_API_KEY.take(8) + \"…\"}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color(0xFF9E9E9E)
+                    )
+                }
+            }
+        } else if (!mapLoaded) {
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp),
+                shape = RoundedCornerShape(12.dp),
+                color = Color(0xE6FFFFFF)
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
+                    Text(
+                        "Memuat peta…",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFF424242)
+                    )
+                }
+            }
+        }
+
 
         // ── Right tool column (like reference) ──
         Column(

@@ -1,0 +1,7 @@
+org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+android.useAndroidX=true
+kotlin.code.style=official
+android.nonTransitiveRClass=true
+
+# Salin file ini ke gradle.properties lalu isi key Anda
+MAPS_API_KEY=AIzaSy................................
