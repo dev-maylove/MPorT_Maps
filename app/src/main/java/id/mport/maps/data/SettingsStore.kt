@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 private val Context.dataStore by preferencesDataStore("mport_maps_settings")
 
 data class AppSettings(
-    val mapType: Int = 1,          // 1=Normal 2=Satellite 3=Terrain 4=Hybrid
+    val mapType: Int = 2,          // 1=Normal 2=Satellite 3=Terrain 4=Hybrid
     val unit: UnitMode = UnitMode.METRIC,
     val darkTheme: Boolean = true
 )
@@ -24,7 +24,7 @@ class SettingsStore(private val context: Context) {
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { prefs ->
         AppSettings(
-            mapType = prefs[KEY_MAP] ?: 1,
+            mapType = prefs[KEY_MAP] ?: 2,
             unit = runCatching { UnitMode.valueOf(prefs[KEY_UNIT] ?: "METRIC") }
                 .getOrDefault(UnitMode.METRIC),
             darkTheme = (prefs[KEY_THEME] ?: "DARK") == "DARK"
