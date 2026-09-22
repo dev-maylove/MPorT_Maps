@@ -109,7 +109,7 @@
     <string name="privacy_updated">Terakhir diperbarui: September 2026</string>
     <string name="privacy_intro">MPorT Maps menghormati privasi Anda. Aplikasi ini dirancang untuk bekerja secara lokal di perangkat tanpa mengirim data pribadi ke server kami.</string>
     <string name="privacy_s1">1. Data yang dikumpulkan</string>
-    <string name="privacy_s1_a">• Lokasi GPS: digunakan hanya saat Anda meminta titik GPS atau mengaktifkan \"My Location\" di peta. Lokasi tidak dikirim ke server pihak ketiga oleh aplikasi ini (kecuali melalui layanan Google Maps SDK yang tunduk pada kebijakan Google).</string>
+    <string name="privacy_s1_a">• Lokasi GPS: digunakan hanya saat Anda meminta titik GPS atau mengaktifkan My Location di peta. Lokasi tidak dikirim ke server pihak ketiga oleh aplikasi ini (kecuali melalui layanan Google Maps SDK yang tunduk pada kebijakan Google).</string>
     <string name="privacy_s1_b">• Survei, marker, dan catatan: disimpan di database lokal (Room) di perangkat Anda. Tidak ada backup otomatis ke cloud.</string>
     <string name="privacy_s1_c">• Pengaturan (satuan, tipe peta, tema, bahasa): disimpan di DataStore lokal.</string>
     <string name="privacy_s2">2. Izin yang digunakan</string>
@@ -145,7 +145,7 @@
     <string name="license_s4">4. Komponen pihak ketiga</string>
     <string name="license_s4_body">Aplikasi ini menggunakan komponen open-source dan pihak ketiga termasuk Android Jetpack, Kotlin, Google Maps SDK, dan pustaka terkait. Komponen tersebut tetap di bawah lisensi masing-masing (misalnya Apache 2.0, Google Terms of Service).</string>
     <string name="license_s5">5. Penafian jaminan</string>
-    <string name="license_s5_body">APLIKASI DISEDIAKAN "SEBAGAIMANA ADANYA" TANPA JAMINAN APA PUN, TERSURAT MAUPUN TERSIRAT, TERMASUK KELAYAKAN UNTUK DIPERDAGANGKAN, KESESUAIAN UNTUK TUJUAN TERTENTU, DAN NON-PELANGGARAN. Hasil survei dan pengukuran bergantung pada akurasi GPS, data peta, dan input pengguna; pengembang tidak bertanggung jawab atas keputusan yang dibuat berdasarkan hasil tersebut.</string>
+    <string name="license_s5_body">APLIKASI DISEDIAKAN SEBAGAIMANA ADANYA TANPA JAMINAN APA PUN, TERSURAT MAUPUN TERSIRAT, TERMASUK KELAYAKAN UNTUK DIPERDAGANGKAN, KESESUAIAN UNTUK TUJUAN TERTENTU, DAN NON-PELANGGARAN. Hasil survei dan pengukuran bergantung pada akurasi GPS, data peta, dan input pengguna; pengembang tidak bertanggung jawab atas keputusan yang dibuat berdasarkan hasil tersebut.</string>
     <string name="license_s6">6. Batasan tanggung jawab</string>
     <string name="license_s6_body">Sejauh diizinkan hukum, pengembang tidak bertanggung jawab atas kerugian tidak langsung, insidental, khusus, atau konsekuensial yang timbul dari penggunaan aplikasi.</string>
     <string name="license_s7">7. Pengakhiran</string>

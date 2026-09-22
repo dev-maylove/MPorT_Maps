@@ -109,7 +109,7 @@
     <string name="privacy_updated">Last updated: September 2026</string>
     <string name="privacy_intro">MPorT Maps respects your privacy. This app is designed to work locally on your device without sending personal data to our servers.</string>
     <string name="privacy_s1">1. Data collected</string>
-    <string name="privacy_s1_a">• GPS location: used only when you request a GPS point or enable \"My Location\" on the map. Location is not sent to third-party servers by this app (except via Google Maps SDK subject to Google\'s policy).</string>
+    <string name="privacy_s1_a">• GPS location: used only when you request a GPS point or enable My Location on the map. Location is not sent to third-party servers by this app (except via Google Maps SDK subject to Google policy).</string>
     <string name="privacy_s1_b">• Surveys, markers, and notes: stored in a local database (Room) on your device. No automatic cloud backup.</string>
     <string name="privacy_s1_c">• Settings (units, map type, theme, language): stored in local DataStore.</string>
     <string name="privacy_s2">2. Permissions used</string>
@@ -145,7 +145,7 @@
     <string name="license_s4">4. Third-party components</string>
     <string name="license_s4_body">This app uses open-source and third-party components including Android Jetpack, Kotlin, Google Maps SDK, and related libraries. Those components remain under their own licenses (e.g. Apache 2.0, Google Terms of Service).</string>
     <string name="license_s5">5. Disclaimer of warranty</string>
-    <string name="license_s5_body">THE APP IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. Survey and measurement results depend on GPS accuracy, map data, and user input; the developer is not liable for decisions made based on those results.</string>
+    <string name="license_s5_body">THE APP IS PROVIDED AS IS WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. Survey and measurement results depend on GPS accuracy, map data, and user input; the developer is not liable for decisions made based on those results.</string>
     <string name="license_s6">6. Limitation of liability</string>
     <string name="license_s6_body">To the maximum extent permitted by law, the developer shall not be liable for any indirect, incidental, special, or consequential damages arising from use of the app.</string>
     <string name="license_s7">7. Termination</string>
@@ -159,7 +159,7 @@
     <string name="security_s1">1. Local data storage</string>
     <string name="security_s1_body">Surveys, markers, notes, and settings are stored only on your device using Android Room database and DataStore. There is no cloud account and no automatic upload of your survey data to our servers.</string>
     <string name="security_s2">2. Location data</string>
-    <string name="security_s2_body">Location is accessed only when you grant permission and when you use GPS or My Location features. The app does not track your location in the background for advertising or analytics beyond what Google Maps SDK may do under Google's policies.</string>
+    <string name="security_s2_body">Location is accessed only when you grant permission and when you use GPS or My Location features. The app does not track your location in the background for advertising or analytics beyond what Google Maps SDK may do under Google policies.</string>
     <string name="security_s3">3. Network usage</string>
     <string name="security_s3_body">Internet is used primarily to load Google Maps tiles (when an API key is configured). Export files are written to device storage you choose; they are not sent to external servers by the app itself.</string>
     <string name="security_s4">4. Permissions</string>
