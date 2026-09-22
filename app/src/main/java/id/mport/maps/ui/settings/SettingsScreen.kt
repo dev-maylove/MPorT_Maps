@@ -1,5 +1,6 @@
 package id.mport.maps.ui.settings
 
+import id.mport.maps.BuildConfig
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -87,8 +88,6 @@ fun SettingsScreen(padding: PaddingValues, vm: SurveyViewModel) {
             )
         }
 
-        HorizontalDivider()
-        
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
         Text("Google Maps", style = MaterialTheme.typography.titleSmall)
         Text(
