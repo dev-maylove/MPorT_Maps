@@ -41,7 +41,7 @@ jobs:
           echo "/opt/gradle-8.9/bin" >> "$GITHUB_PATH"
 
       - name: Set up Gradle build cache
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Inject Maps API key (optional)
         env:

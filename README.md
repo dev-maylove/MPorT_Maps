@@ -1,6 +1,7 @@
 # MPorT Maps
 
 Aplikasi survei & pengukuran jarak/luas berbasis Google Maps (Compose).
+Bilingual: **English** + **Bahasa Indonesia**.
 
 ## Fitur
 - Ukur jarak (polyline) & luas (polygon)
@@ -13,7 +14,8 @@ Aplikasi survei & pengukuran jarak/luas berbasis Google Maps (Compose).
 - Export CSV / JSON / KML
 - Marker & Catatan lokal
 - Neon Dark / Light theme (DataStore)
-- Settings: Saved List, Map Type, Units, GPS Settings, About, Privacy Policy
+- Settings: Saved List, Map Type, Units, GPS Settings, Language, About, Privacy Policy, License, Security
+- **Language**: System / English / Bahasa Indonesia
 - Icon + Splash dari logo MPorT Maps
 
 ## Setup
@@ -22,22 +24,12 @@ Aplikasi survei & pengukuran jarak/luas berbasis Google Maps (Compose).
 3. Sync → Run
 
 ## Perubahan v1.2.0
-- Settings UI list-style (Saved List, Map Type, Units, GPS Settings, About, Privacy Policy)
-- Units dialog: Meter / Kilometer / Mile / Feet / Nautical Mile / Yard
-- GPS Settings membuka sistem Location settings
-- Halaman About & Privacy Policy
-- UnitMode diperluas + backward compatible dengan METRIC/IMPERIAL lama
-- Hapus menu Tips and Tricks, Rate Application, More Apps
-
-## Bug fixes sebelumnya (v1.1.1)
-- KML export menghasilkan XML valid (Polygon / LineString)
-- Export aman di API 26–28
-- Escape CSV / JSON / XML
-- Theme dark/light mengikuti Settings
-- Tombol "Buka" di Riwayat mengembalikan titik ke peta
-- Setelah simpan survey, undo/redo stack di-reset
-- Marker Compose diberi key stabil
-- MainActivity: setTheme sebelum super.onCreate
+- Settings UI list-style
+- Units dialog: m / km / mi / ft / nmi / yd
+- GPS Settings → system Location settings
+- Halaman About, Privacy Policy, License & Security
+- **Bilingual EN + ID** dengan pilihan bahasa di Settings
+- UnitMode diperluas + backward compatible
 
 ## Build
 ```bash

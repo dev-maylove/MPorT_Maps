@@ -13,9 +13,11 @@ import androidx.compose.material.icons.filled.StickyNote2
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import id.mport.maps.R
 import id.mport.maps.ui.history.HistoryScreen
 import id.mport.maps.ui.home.HomeScreen
 import id.mport.maps.ui.markers.MarkersScreen
@@ -47,7 +49,6 @@ fun SurveyApp(vm: SurveyViewModel = viewModel()) {
             result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
     }
 
-    // Apply theme from DataStore settings
     MPorTSurveyTheme(darkTheme = settings.darkTheme) {
         Scaffold(
             bottomBar = {
@@ -55,32 +56,32 @@ fun SurveyApp(vm: SurveyViewModel = viewModel()) {
                     NavigationBarItem(
                         selected = tab == 0,
                         onClick = { tab = 0 },
-                        icon = { Icon(Icons.Default.Map, contentDescription = "Survey") },
-                        label = { Text("Survey") }
+                        icon = { Icon(Icons.Default.Map, contentDescription = stringResource(R.string.nav_survey)) },
+                        label = { Text(stringResource(R.string.nav_survey)) }
                     )
                     NavigationBarItem(
                         selected = tab == 1,
                         onClick = { tab = 1 },
-                        icon = { Icon(Icons.Default.History, contentDescription = "Riwayat") },
-                        label = { Text("Riwayat") }
+                        icon = { Icon(Icons.Default.History, contentDescription = stringResource(R.string.nav_history)) },
+                        label = { Text(stringResource(R.string.nav_history)) }
                     )
                     NavigationBarItem(
                         selected = tab == 2,
                         onClick = { tab = 2 },
-                        icon = { Icon(Icons.Default.Place, contentDescription = "Marker") },
-                        label = { Text("Marker") }
+                        icon = { Icon(Icons.Default.Place, contentDescription = stringResource(R.string.nav_marker)) },
+                        label = { Text(stringResource(R.string.nav_marker)) }
                     )
                     NavigationBarItem(
                         selected = tab == 3,
                         onClick = { tab = 3 },
-                        icon = { Icon(Icons.Default.StickyNote2, contentDescription = "Catatan") },
-                        label = { Text("Catatan") }
+                        icon = { Icon(Icons.Default.StickyNote2, contentDescription = stringResource(R.string.nav_notes)) },
+                        label = { Text(stringResource(R.string.nav_notes)) }
                     )
                     NavigationBarItem(
                         selected = tab == 4,
                         onClick = { tab = 4 },
-                        icon = { Icon(Icons.Default.Settings, contentDescription = "Pengaturan") },
-                        label = { Text("Setelan") }
+                        icon = { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.nav_settings)) },
+                        label = { Text(stringResource(R.string.nav_settings)) }
                     )
                 }
             }

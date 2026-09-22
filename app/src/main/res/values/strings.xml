@@ -1,4 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MPorT Maps</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_survey">Survey</string>
+    <string name="nav_history">History</string>
+    <string name="nav_marker">Marker</string>
+    <string name="nav_notes">Notes</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_saved_list">Saved List</string>
+    <string name="settings_map_type">Map Type</string>
+    <string name="settings_units">Units</string>
+    <string name="settings_gps">GPS Settings</string>
+    <string name="settings_about">About</string>
+    <string name="settings_privacy">Privacy Policy</string>
+    <string name="settings_dark_theme">Dark Theme</string>
+    <string name="settings_language">Language</string>
+    <string name="lang_system">System default</string>
+    <string name="lang_english">English</string>
+    <string name="lang_indonesian">Bahasa Indonesia</string>
+    <string name="please_select">Please Select</string>
+    <string name="cancel">CANCEL</string>
+    <string name="ok">OK</string>
+    <string name="back">Back</string>
+
+    <!-- Map types -->
+    <string name="map_normal">Normal</string>
+    <string name="map_satellite">Satellite</string>
+    <string name="map_terrain">Terrain</string>
+    <string name="map_hybrid">Hybrid</string>
+
+    <!-- Units (labels already in enum, but for dialog title etc.) -->
+    <string name="unit_meter">Meter (m)</string>
+    <string name="unit_kilometer">Kilometer (km)</string>
+    <string name="unit_mile">Mile (mi)</string>
+    <string name="unit_feet">Feet (f)</string>
+    <string name="unit_nautical_mile">Nautical Mile (nmi)</string>
+    <string name="unit_yard">Yard (yd)</string>
+
+    <!-- Home / Survey -->
+    <string name="mode_distance">Distance</string>
+    <string name="mode_area">Area</string>
+    <string name="clear_all_points">Clear all points</string>
+    <string name="unit_label">Unit: %1$s</string>
+    <string name="mode_distance_label">Mode: Distance</string>
+    <string name="mode_area_label">Mode: Area</string>
+    <string name="save_survey">Save survey</string>
+    <string name="gps_locate">GPS</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+    <string name="permission_needed">Location permission required</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="maps_key_missing">Maps API key not set — map may be empty</string>
+
+    <!-- History -->
+    <string name="history_title">History</string>
+    <string name="history_empty">No saved surveys yet</string>
+    <string name="open">Open</string>
+    <string name="delete">Delete</string>
+    <string name="export">Export</string>
+    <string name="distance_label">Distance: %1$s</string>
+    <string name="area_label">Area: %1$s</string>
+    <string name="perimeter_label">Perimeter: %1$s</string>
+
+    <!-- Markers & Notes -->
+    <string name="markers_title">Markers</string>
+    <string name="markers_empty">No markers yet</string>
+    <string name="notes_title">Notes</string>
+    <string name="notes_empty">No notes yet</string>
+    <string name="add_marker">Add marker</string>
+    <string name="add_note">Add note</string>
+    <string name="title">Title</string>
+    <string name="notes">Notes</string>
+    <string name="body">Body</string>
+    <string name="save">Save</string>
+
+    <!-- Messages -->
+    <string name="gps_failed">GPS could not get location. Make sure GPS is on and location permission is granted.</string>
+    <string name="no_points_to_save">No points to save</string>
+    <string name="survey_saved">Survey saved</string>
+    <string name="survey_opened">Survey opened: %1$s</string>
+    <string name="save_failed">Failed to save: %1$s</string>
+
+    <!-- About -->
+    <string name="about_title">About</string>
+    <string name="about_version">Version 1.2.0</string>
+    <string name="about_desc">Map-based survey and distance/area measurement app. Use GPS, markers, notes, and export survey results to CSV / JSON / KML.</string>
+    <string name="about_features_title">Main features:</string>
+    <string name="about_f1">• Measure distance (polyline) &amp; area (polygon)</string>
+    <string name="about_f2">• Undo / Redo &amp; clear points</string>
+    <string name="about_f3">• GPS → add point automatically</string>
+    <string name="about_f4">• Long-press map → Marker</string>
+    <string name="about_f5">• Map types: Normal / Satellite / Terrain / Hybrid</string>
+    <string name="about_f6">• Units: m, km, mi, ft, nmi, yd</string>
+    <string name="about_f7">• Survey history + reopen on map</string>
+    <string name="about_f8">• Export CSV / JSON / KML</string>
+    <string name="about_f9">• Local markers &amp; notes</string>
+    <string name="about_f10">• Dark / Light theme</string>
+    <string name="about_dev">Developer: MPorT</string>
+    <string name="about_tagline">Offline survey • GPS • Map measurement • Export</string>
+    <string name="about_local_data">Data is stored locally on your device (Room + DataStore). No account or cloud sync.</string>
+
+    <!-- Privacy -->
+    <string name="privacy_title">Privacy Policy</string>
+    <string name="privacy_updated">Last updated: September 2026</string>
+    <string name="privacy_intro">MPorT Maps respects your privacy. This app is designed to work locally on your device without sending personal data to our servers.</string>
+    <string name="privacy_s1">1. Data collected</string>
+    <string name="privacy_s1_a">• GPS location: used only when you request a GPS point or enable \"My Location\" on the map. Location is not sent to third-party servers by this app (except via Google Maps SDK subject to Google\'s policy).</string>
+    <string name="privacy_s1_b">• Surveys, markers, and notes: stored in a local database (Room) on your device. No automatic cloud backup.</string>
+    <string name="privacy_s1_c">• Settings (units, map type, theme, language): stored in local DataStore.</string>
+    <string name="privacy_s2">2. Permissions used</string>
+    <string name="privacy_s2_body">• ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION — to show position and add points from GPS.\n• INTERNET — to load Google Maps tiles (if API key is available).</string>
+    <string name="privacy_s3">3. Data sharing</string>
+    <string name="privacy_s3_body">We do not sell, rent, or share your personal data. Export files (CSV/JSON/KML) are created only on your request and saved to storage you choose.</string>
+    <string name="privacy_s4">4. Google Maps</string>
+    <string name="privacy_s4_body">Maps are provided by Google Maps SDK. Use of Google services is subject to Google Privacy Policy and Terms of Service.</string>
+    <string name="privacy_s5">5. Children</string>
+    <string name="privacy_s5_body">This app is not directed at children under 13 and does not knowingly collect data from children.</string>
+    <string name="privacy_s6">6. Policy changes</string>
+    <string name="privacy_s6_body">We may update this policy. The latest version will be shown on this page.</string>
+    <string name="privacy_s7">7. Contact</string>
+    <string name="privacy_s7_body">For privacy questions, contact the MPorT Maps developer.</string>
+
+    <!-- Misc -->
+    <string name="api_key_ok">Google Maps API key installed</string>
+    <string name="api_key_missing">API key not set — fill MAPS_API_KEY in gradle.properties</string>
+    <string name="version_line">MPorT Maps v1.2.0</string>
+
+    <string name="settings_license">License</string>
+    <string name="settings_security">Security</string>
+
+    <!-- License -->
+    <string name="license_title">License</string>
+    <string name="license_intro">MPorT Maps is provided for personal and professional survey use. Please read the terms below.</string>
+    <string name="license_s1">1. License grant</string>
+    <string name="license_s1_body">You are granted a non-exclusive, non-transferable, revocable license to install and use this application on devices you own or control for measuring distance and area, managing markers, notes, and exporting survey data.</string>
+    <string name="license_s2">2. Ownership</string>
+    <string name="license_s2_body">All rights, title, and interest in MPorT Maps (including code, branding, and assets) remain with the developer (MPorT), except for third-party libraries and Google Maps SDK which are governed by their respective licenses.</string>
+    <string name="license_s3">3. Restrictions</string>
+    <string name="license_s3_body">You may not: reverse engineer, decompile, or disassemble the app (except where permitted by law); redistribute, sell, or sublicense the app; remove copyright or attribution notices; use the app for unlawful purposes.</string>
+    <string name="license_s4">4. Third-party components</string>
+    <string name="license_s4_body">This app uses open-source and third-party components including Android Jetpack, Kotlin, Google Maps SDK, and related libraries. Those components remain under their own licenses (e.g. Apache 2.0, Google Terms of Service).</string>
+    <string name="license_s5">5. Disclaimer of warranty</string>
+    <string name="license_s5_body">THE APP IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. Survey and measurement results depend on GPS accuracy, map data, and user input; the developer is not liable for decisions made based on those results.</string>
+    <string name="license_s6">6. Limitation of liability</string>
+    <string name="license_s6_body">To the maximum extent permitted by law, the developer shall not be liable for any indirect, incidental, special, or consequential damages arising from use of the app.</string>
+    <string name="license_s7">7. Termination</string>
+    <string name="license_s7_body">This license terminates automatically if you breach these terms. Upon termination you must stop using and uninstall the app.</string>
+    <string name="license_s8">8. Contact</string>
+    <string name="license_s8_body">For license questions, contact the MPorT Maps developer.</string>
+
+    <!-- Security -->
+    <string name="security_title">Security</string>
+    <string name="security_intro">MPorT Maps is designed with privacy and local-first security in mind. Below is how your data and the app are protected.</string>
+    <string name="security_s1">1. Local data storage</string>
+    <string name="security_s1_body">Surveys, markers, notes, and settings are stored only on your device using Android Room database and DataStore. There is no cloud account and no automatic upload of your survey data to our servers.</string>
+    <string name="security_s2">2. Location data</string>
+    <string name="security_s2_body">Location is accessed only when you grant permission and when you use GPS or My Location features. The app does not track your location in the background for advertising or analytics beyond what Google Maps SDK may do under Google's policies.</string>
+    <string name="security_s3">3. Network usage</string>
+    <string name="security_s3_body">Internet is used primarily to load Google Maps tiles (when an API key is configured). Export files are written to device storage you choose; they are not sent to external servers by the app itself.</string>
+    <string name="security_s4">4. Permissions</string>
+    <string name="security_s4_body">• Location (fine/coarse): required for GPS points and map position.\n• Internet: required for map tiles.\nNo contacts, camera, microphone, or SMS permissions are requested.</string>
+    <string name="security_s5">5. Exports</string>
+    <string name="security_s5_body">CSV, JSON, and KML exports are created only when you request them and are saved under your control (e.g. Downloads). Treat exported files according to your own data policy.</string>
+    <string name="security_s6">6. Updates &amp; integrity</string>
+    <string name="security_s6_body">Install the app only from trusted sources. Keep your device OS and the app updated. Do not install modified or unofficial builds.</string>
+    <string name="security_s7">7. Reporting issues</string>
+    <string name="security_s7_body">If you discover a security concern, please contact the MPorT Maps developer with details so it can be investigated.</string>
+
 </resources>

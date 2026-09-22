@@ -1,5 +1,7 @@
 package id.mport.maps.ui.notes
 
+import id.mport.maps.R
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,6 +11,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import id.mport.maps.data.entity.NoteEntity
@@ -28,14 +31,14 @@ fun NotesScreen(padding: PaddingValues, vm: SurveyViewModel) {
             .padding(16.dp)
     ) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("Catatan", style = MaterialTheme.typography.headlineSmall)
+            Text(stringResource(R.string.notes_title), style = MaterialTheme.typography.headlineSmall)
             IconButton(onClick = { showAdd = true }) {
                 Icon(Icons.Default.Add, contentDescription = "Tambah")
             }
         }
         Spacer(Modifier.height(12.dp))
         if (notes.isEmpty()) {
-            Text("Belum ada catatan.")
+            Text(stringResource(R.string.notes_empty))
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 items(notes, key = { it.id }) { note ->
@@ -79,19 +82,19 @@ private fun AddNoteDialog(onDismiss: () -> Unit, onSave: (String, String) -> Uni
     var body by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Catatan Baru") },
+        title = { Text(stringResource(R.string.add_note)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("Judul") }, singleLine = true)
-                OutlinedTextField(value = body, onValueChange = { body = it }, label = { Text("Isi") }, minLines = 4)
+                OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text(stringResource(R.string.title)) }, singleLine = true)
+                OutlinedTextField(value = body, onValueChange = { body = it }, label = { Text(stringResource(R.string.body)) }, minLines = 4)
             }
         },
         confirmButton = {
             TextButton(
                 onClick = { onSave(title.ifBlank { "Catatan" }, body) },
                 enabled = body.isNotBlank()
-            ) { Text("Simpan") }
+            ) { Text(stringResource(R.string.save)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Batal") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
 }

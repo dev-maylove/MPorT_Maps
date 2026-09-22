@@ -1,5 +1,7 @@
 package id.mport.maps.ui.markers
 
+import id.mport.maps.R
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import id.mport.maps.data.entity.MarkerEntity
@@ -26,11 +29,11 @@ fun MarkersScreen(padding: PaddingValues, vm: SurveyViewModel) {
             .padding(padding)
             .padding(16.dp)
     ) {
-        Text("Marker Tersimpan", style = MaterialTheme.typography.headlineSmall)
+        Text(stringResource(R.string.markers_title), style = MaterialTheme.typography.headlineSmall)
         Text("Long-press di peta Survey untuk menambah marker.")
         Spacer(Modifier.height(12.dp))
         if (markers.isEmpty()) {
-            Text("Belum ada marker.")
+            Text(stringResource(R.string.markers_empty))
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 items(markers, key = { it.id }) { marker ->

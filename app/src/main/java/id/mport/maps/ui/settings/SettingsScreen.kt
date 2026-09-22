@@ -15,15 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import id.mport.maps.BuildConfig
+import id.mport.maps.R
+import id.mport.maps.data.AppLanguage
 import id.mport.maps.domain.unit.UnitMode
 import id.mport.maps.map.MapTypeHelper
 import id.mport.maps.viewmodel.SurveyViewModel
 
-private enum class SettingsPage { MAIN, ABOUT, PRIVACY }
+private enum class SettingsPage { MAIN, ABOUT, PRIVACY, LICENSE, SECURITY }
 
 @Composable
 fun SettingsScreen(
@@ -35,6 +38,7 @@ fun SettingsScreen(
     var page by remember { mutableStateOf(SettingsPage.MAIN) }
     var showMapTypeDialog by remember { mutableStateOf(false) }
     var showUnitDialog by remember { mutableStateOf(false) }
+    var showLangDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     when (page) {
@@ -46,6 +50,14 @@ fun SettingsScreen(
             padding = padding,
             onBack = { page = SettingsPage.MAIN }
         )
+        SettingsPage.LICENSE -> LicensePage(
+            padding = padding,
+            onBack = { page = SettingsPage.MAIN }
+        )
+        SettingsPage.SECURITY -> SecurityPage(
+            padding = padding,
+            onBack = { page = SettingsPage.MAIN }
+        )
         SettingsPage.MAIN -> {
             Column(
                 modifier = Modifier
@@ -54,7 +66,7 @@ fun SettingsScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    text = "Settings",
+                    text = stringResource(R.string.settings_title),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
@@ -62,27 +74,27 @@ fun SettingsScreen(
 
                 SettingsItem(
                     icon = Icons.Default.Bookmark,
-                    title = "Saved List",
+                    title = stringResource(R.string.settings_saved_list),
                     onClick = { onOpenHistory?.invoke() }
                 )
                 HorizontalDivider()
                 SettingsItem(
                     icon = Icons.Default.Map,
-                    title = "Map Type",
+                    title = stringResource(R.string.settings_map_type),
                     subtitle = MapTypeHelper.label(settings.mapType),
                     onClick = { showMapTypeDialog = true }
                 )
                 HorizontalDivider()
                 SettingsItem(
                     icon = Icons.Default.Straighten,
-                    title = "Units",
+                    title = stringResource(R.string.settings_units),
                     subtitle = settings.unit.label,
                     onClick = { showUnitDialog = true }
                 )
                 HorizontalDivider()
                 SettingsItem(
                     icon = Icons.Default.MyLocation,
-                    title = "GPS Settings",
+                    title = stringResource(R.string.settings_gps),
                     onClick = {
                         runCatching {
                             context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
@@ -91,15 +103,38 @@ fun SettingsScreen(
                 )
                 HorizontalDivider()
                 SettingsItem(
+                    icon = Icons.Default.Language,
+                    title = stringResource(R.string.settings_language),
+                    subtitle = when (settings.language) {
+                        AppLanguage.ENGLISH -> stringResource(R.string.lang_english)
+                        AppLanguage.INDONESIAN -> stringResource(R.string.lang_indonesian)
+                        AppLanguage.SYSTEM -> stringResource(R.string.lang_system)
+                    },
+                    onClick = { showLangDialog = true }
+                )
+                HorizontalDivider()
+                SettingsItem(
                     icon = Icons.Default.Info,
-                    title = "About",
+                    title = stringResource(R.string.settings_about),
                     onClick = { page = SettingsPage.ABOUT }
                 )
                 HorizontalDivider()
                 SettingsItem(
                     icon = Icons.Default.Policy,
-                    title = "Privacy Policy",
+                    title = stringResource(R.string.settings_privacy),
                     onClick = { page = SettingsPage.PRIVACY }
+                )
+                HorizontalDivider()
+                SettingsItem(
+                    icon = Icons.Default.Description,
+                    title = stringResource(R.string.settings_license),
+                    onClick = { page = SettingsPage.LICENSE }
+                )
+                HorizontalDivider()
+                SettingsItem(
+                    icon = Icons.Default.Security,
+                    title = stringResource(R.string.settings_security),
+                    onClick = { page = SettingsPage.SECURITY }
                 )
                 HorizontalDivider()
 
@@ -114,7 +149,7 @@ fun SettingsScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.DarkMode, contentDescription = null, modifier = Modifier.size(24.dp))
                         Spacer(Modifier.width(16.dp))
-                        Text("Dark Theme", style = MaterialTheme.typography.bodyLarge)
+                        Text(stringResource(R.string.settings_dark_theme), style = MaterialTheme.typography.bodyLarge)
                     }
                     Switch(
                         checked = settings.darkTheme,
@@ -125,15 +160,15 @@ fun SettingsScreen(
 
                 Spacer(Modifier.height(24.dp))
                 Text(
-                    text = "MPorT Maps v1.2.0",
+                    text = stringResource(R.string.version_line),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
                 Text(
                     text = if (BuildConfig.HAS_MAPS_KEY)
-                        "Google Maps API key terpasang"
+                        stringResource(R.string.api_key_ok)
                     else
-                        "API key belum diisi — isi MAPS_API_KEY di gradle.properties",
+                        stringResource(R.string.api_key_missing),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                 )
@@ -161,6 +196,17 @@ fun SettingsScreen(
                 showUnitDialog = false
             },
             onDismiss = { showUnitDialog = false }
+        )
+    }
+
+    if (showLangDialog) {
+        LanguageDialog(
+            current = settings.language,
+            onSelect = {
+                vm.setLanguage(it)
+                showLangDialog = false
+            },
+            onDismiss = { showLangDialog = false }
         )
     }
 }
@@ -206,14 +252,14 @@ private fun MapTypeDialog(
     onDismiss: () -> Unit
 ) {
     val options = listOf(
-        1 to "Normal",
-        2 to "Satellite",
-        3 to "Terrain",
-        4 to "Hybrid"
+        1 to stringResource(R.string.map_normal),
+        2 to stringResource(R.string.map_satellite),
+        3 to stringResource(R.string.map_terrain),
+        4 to stringResource(R.string.map_hybrid)
     )
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Please Select") },
+        title = { Text(stringResource(R.string.please_select)) },
         text = {
             Column {
                 options.forEach { (id, label) ->
@@ -224,10 +270,7 @@ private fun MapTypeDialog(
                             .padding(vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RadioButton(
-                            selected = current == id,
-                            onClick = { onSelect(id) }
-                        )
+                        RadioButton(selected = current == id, onClick = { onSelect(id) })
                         Spacer(Modifier.width(8.dp))
                         Text(label)
                     }
@@ -235,10 +278,10 @@ private fun MapTypeDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) { Text("OK") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.ok)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("CANCEL") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
         }
     )
 }
@@ -251,7 +294,7 @@ private fun UnitSelectDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Please Select") },
+        title = { Text(stringResource(R.string.please_select)) },
         text = {
             Column {
                 UnitMode.entries.forEach { mode ->
@@ -262,10 +305,7 @@ private fun UnitSelectDialog(
                             .padding(vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RadioButton(
-                            selected = current == mode,
-                            onClick = { onSelect(mode) }
-                        )
+                        RadioButton(selected = current == mode, onClick = { onSelect(mode) })
                         Spacer(Modifier.width(8.dp))
                         Text(mode.label)
                     }
@@ -273,10 +313,50 @@ private fun UnitSelectDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) { Text("OK") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.ok)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("CANCEL") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
+        }
+    )
+}
+
+@Composable
+private fun LanguageDialog(
+    current: AppLanguage,
+    onSelect: (AppLanguage) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val options = listOf(
+        AppLanguage.SYSTEM to stringResource(R.string.lang_system),
+        AppLanguage.ENGLISH to stringResource(R.string.lang_english),
+        AppLanguage.INDONESIAN to stringResource(R.string.lang_indonesian)
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.please_select)) },
+        text = {
+            Column {
+                options.forEach { (lang, label) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onSelect(lang) }
+                            .padding(vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = current == lang, onClick = { onSelect(lang) })
+                        Spacer(Modifier.width(8.dp))
+                        Text(label)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.ok)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
         }
     )
 }
@@ -295,9 +375,9 @@ private fun AboutPage(padding: PaddingValues, onBack: () -> Unit) {
                 .padding(8.dp)
         ) {
             IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
             }
-            Text("About", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.about_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         }
         Column(
             modifier = Modifier
@@ -307,30 +387,24 @@ private fun AboutPage(padding: PaddingValues, onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text("MPorT Maps", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-            Text("Version 1.2.0")
-            Text(
-                "Aplikasi survei dan pengukuran jarak/luas berbasis peta offline-capable. " +
-                    "Gunakan GPS, marker, catatan, dan ekspor hasil survei ke CSV / JSON / KML."
-            )
+            Text(stringResource(R.string.about_version))
+            Text(stringResource(R.string.about_desc))
             HorizontalDivider()
-            Text("Fitur utama:", fontWeight = FontWeight.SemiBold)
-            Text("• Ukur jarak (polyline) & luas (polygon)")
-            Text("• Undo / Redo & clear points")
-            Text("• GPS → tambah titik otomatis")
-            Text("• Long-press peta → Marker")
-            Text("• Tipe peta: Normal / Satellite / Terrain / Hybrid")
-            Text("• Satuan: m, km, mi, ft, nmi, yd")
-            Text("• Riwayat survei + buka kembali")
-            Text("• Export CSV / JSON / KML")
-            Text("• Marker & Catatan lokal")
-            Text("• Tema Dark / Light")
+            Text(stringResource(R.string.about_features_title), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.about_f1))
+            Text(stringResource(R.string.about_f2))
+            Text(stringResource(R.string.about_f3))
+            Text(stringResource(R.string.about_f4))
+            Text(stringResource(R.string.about_f5))
+            Text(stringResource(R.string.about_f6))
+            Text(stringResource(R.string.about_f7))
+            Text(stringResource(R.string.about_f8))
+            Text(stringResource(R.string.about_f9))
+            Text(stringResource(R.string.about_f10))
             HorizontalDivider()
-            Text("Developer: MPorT")
-            Text("Offline survey • GPS • Map measurement • Export")
-            Text(
-                "Data disimpan lokal di perangkat Anda (Room + DataStore). " +
-                    "Tidak ada akun atau sinkronisasi cloud."
-            )
+            Text(stringResource(R.string.about_dev))
+            Text(stringResource(R.string.about_tagline))
+            Text(stringResource(R.string.about_local_data))
         }
     }
 }
@@ -349,9 +423,9 @@ private fun PrivacyPage(padding: PaddingValues, onBack: () -> Unit) {
                 .padding(8.dp)
         ) {
             IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
             }
-            Text("Privacy Policy", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.privacy_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         }
         Column(
             modifier = Modifier
@@ -360,53 +434,118 @@ private fun PrivacyPage(padding: PaddingValues, onBack: () -> Unit) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text("Privacy Policy — MPorT Maps", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Text("Last updated: September 2026")
-            Text(
-                "MPorT Maps menghormati privasi Anda. Aplikasi ini dirancang untuk bekerja " +
-                    "secara lokal di perangkat tanpa mengirim data pribadi ke server kami."
-            )
-            Text("1. Data yang dikumpulkan", fontWeight = FontWeight.SemiBold)
-            Text(
-                "• Lokasi GPS: digunakan hanya saat Anda meminta titik GPS atau mengaktifkan " +
-                    "\"My Location\" di peta. Lokasi tidak dikirim ke server pihak ketiga oleh aplikasi ini " +
-                    "(kecuali melalui layanan Google Maps SDK yang tunduk pada kebijakan Google)."
-            )
-            Text(
-                "• Survei, marker, dan catatan: disimpan di database lokal (Room) di perangkat Anda. " +
-                    "Tidak ada backup otomatis ke cloud."
-            )
-            Text(
-                "• Pengaturan (satuan, tipe peta, tema): disimpan di DataStore lokal."
-            )
-            Text("2. Izin yang digunakan", fontWeight = FontWeight.SemiBold)
-            Text(
-                "• ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION — untuk menampilkan posisi " +
-                    "dan menambah titik dari GPS.\n" +
-                    "• INTERNET — untuk memuat tile peta Google Maps (jika API key tersedia)."
-            )
-            Text("3. Berbagi data", fontWeight = FontWeight.SemiBold)
-            Text(
-                "Kami tidak menjual, menyewakan, atau membagikan data pribadi Anda. " +
-                    "Export file (CSV/JSON/KML) hanya dibuat atas permintaan Anda dan disimpan " +
-                    "di penyimpanan yang Anda pilih."
-            )
-            Text("4. Google Maps", fontWeight = FontWeight.SemiBold)
-            Text(
-                "Peta disediakan oleh Google Maps SDK. Penggunaan layanan Google tunduk pada " +
-                    "Google Privacy Policy dan Terms of Service."
-            )
-            Text("5. Anak-anak", fontWeight = FontWeight.SemiBold)
-            Text(
-                "Aplikasi ini tidak ditujukan untuk anak di bawah 13 tahun dan tidak " +
-                    "sengaja mengumpulkan data dari anak-anak."
-            )
-            Text("6. Perubahan kebijakan", fontWeight = FontWeight.SemiBold)
-            Text(
-                "Kami dapat memperbarui kebijakan ini. Versi terbaru akan ditampilkan di halaman ini."
-            )
-            Text("7. Kontak", fontWeight = FontWeight.SemiBold)
-            Text("Jika ada pertanyaan mengenai privasi, hubungi pengembang MPorT Maps.")
+            Text(stringResource(R.string.privacy_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.privacy_updated))
+            Text(stringResource(R.string.privacy_intro))
+            Text(stringResource(R.string.privacy_s1), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.privacy_s1_a))
+            Text(stringResource(R.string.privacy_s1_b))
+            Text(stringResource(R.string.privacy_s1_c))
+            Text(stringResource(R.string.privacy_s2), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.privacy_s2_body))
+            Text(stringResource(R.string.privacy_s3), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.privacy_s3_body))
+            Text(stringResource(R.string.privacy_s4), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.privacy_s4_body))
+            Text(stringResource(R.string.privacy_s5), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.privacy_s5_body))
+            Text(stringResource(R.string.privacy_s6), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.privacy_s6_body))
+            Text(stringResource(R.string.privacy_s7), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.privacy_s7_body))
+        }
+    }
+}
+
+
+@Composable
+private fun LicensePage(padding: PaddingValues, onBack: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+            }
+            Text(stringResource(R.string.license_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(stringResource(R.string.license_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.license_intro))
+            Text(stringResource(R.string.license_s1), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.license_s1_body))
+            Text(stringResource(R.string.license_s2), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.license_s2_body))
+            Text(stringResource(R.string.license_s3), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.license_s3_body))
+            Text(stringResource(R.string.license_s4), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.license_s4_body))
+            Text(stringResource(R.string.license_s5), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.license_s5_body))
+            Text(stringResource(R.string.license_s6), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.license_s6_body))
+            Text(stringResource(R.string.license_s7), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.license_s7_body))
+            Text(stringResource(R.string.license_s8), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.license_s8_body))
+        }
+    }
+}
+
+@Composable
+private fun SecurityPage(padding: PaddingValues, onBack: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+            }
+            Text(stringResource(R.string.security_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(stringResource(R.string.security_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.security_intro))
+            Text(stringResource(R.string.security_s1), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.security_s1_body))
+            Text(stringResource(R.string.security_s2), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.security_s2_body))
+            Text(stringResource(R.string.security_s3), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.security_s3_body))
+            Text(stringResource(R.string.security_s4), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.security_s4_body))
+            Text(stringResource(R.string.security_s5), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.security_s5_body))
+            Text(stringResource(R.string.security_s6), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.security_s6_body))
+            Text(stringResource(R.string.security_s7), fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.security_s7_body))
         }
     }
 }

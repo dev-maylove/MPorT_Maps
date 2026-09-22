@@ -226,6 +226,10 @@ class SurveyViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch { settingsStore.setDarkTheme(dark) }
     }
 
+    fun setLanguage(lang: id.mport.maps.data.AppLanguage) {
+        viewModelScope.launch { settingsStore.setLanguage(lang) }
+    }
+
     fun restoreSurvey(survey: SurveyEntity) {
         val points = PointCodec.decode(survey.pointsJson)
         val mode = runCatching { MeasurementMode.valueOf(survey.mode) }

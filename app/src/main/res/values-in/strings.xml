@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MPorT Maps</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_survey">Survey</string>
+    <string name="nav_history">Riwayat</string>
+    <string name="nav_marker">Marker</string>
+    <string name="nav_notes">Catatan</string>
+    <string name="nav_settings">Setelan</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_saved_list">Daftar Tersimpan</string>
+    <string name="settings_map_type">Tipe Peta</string>
+    <string name="settings_units">Satuan</string>
+    <string name="settings_gps">Pengaturan GPS</string>
+    <string name="settings_about">Tentang</string>
+    <string name="settings_privacy">Kebijakan Privasi</string>
+    <string name="settings_dark_theme">Tema Gelap</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="lang_system">Ikuti sistem</string>
+    <string name="lang_english">English</string>
+    <string name="lang_indonesian">Bahasa Indonesia</string>
+    <string name="please_select">Silakan Pilih</string>
+    <string name="cancel">BATAL</string>
+    <string name="ok">OK</string>
+    <string name="back">Kembali</string>
+
+    <!-- Map types -->
+    <string name="map_normal">Normal</string>
+    <string name="map_satellite">Satelit</string>
+    <string name="map_terrain">Terrain</string>
+    <string name="map_hybrid">Hybrid</string>
+
+    <!-- Units -->
+    <string name="unit_meter">Meter (m)</string>
+    <string name="unit_kilometer">Kilometer (km)</string>
+    <string name="unit_mile">Mil (mi)</string>
+    <string name="unit_feet">Kaki (f)</string>
+    <string name="unit_nautical_mile">Mil Laut (nmi)</string>
+    <string name="unit_yard">Yard (yd)</string>
+
+    <!-- Home / Survey -->
+    <string name="mode_distance">Jarak</string>
+    <string name="mode_area">Luas</string>
+    <string name="clear_all_points">Hapus semua titik</string>
+    <string name="unit_label">Satuan: %1$s</string>
+    <string name="mode_distance_label">Mode: Jarak</string>
+    <string name="mode_area_label">Mode: Area</string>
+    <string name="save_survey">Simpan survey</string>
+    <string name="gps_locate">GPS</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+    <string name="permission_needed">Izin lokasi diperlukan</string>
+    <string name="grant_permission">Berikan izin</string>
+    <string name="maps_key_missing">API key Maps belum diisi — peta mungkin kosong</string>
+
+    <!-- History -->
+    <string name="history_title">Riwayat</string>
+    <string name="history_empty">Belum ada survey tersimpan</string>
+    <string name="open">Buka</string>
+    <string name="delete">Hapus</string>
+    <string name="export">Ekspor</string>
+    <string name="distance_label">Jarak: %1$s</string>
+    <string name="area_label">Luas: %1$s</string>
+    <string name="perimeter_label">Keliling: %1$s</string>
+
+    <!-- Markers & Notes -->
+    <string name="markers_title">Marker</string>
+    <string name="markers_empty">Belum ada marker</string>
+    <string name="notes_title">Catatan</string>
+    <string name="notes_empty">Belum ada catatan</string>
+    <string name="add_marker">Tambah marker</string>
+    <string name="add_note">Tambah catatan</string>
+    <string name="title">Judul</string>
+    <string name="notes">Catatan</string>
+    <string name="body">Isi</string>
+    <string name="save">Simpan</string>
+
+    <!-- Messages -->
+    <string name="gps_failed">GPS tidak mendapatkan lokasi. Pastikan GPS aktif &amp; izin lokasi.</string>
+    <string name="no_points_to_save">Tidak ada titik untuk disimpan</string>
+    <string name="survey_saved">Survey tersimpan</string>
+    <string name="survey_opened">Survey dibuka: %1$s</string>
+    <string name="save_failed">Gagal menyimpan: %1$s</string>
+
+    <!-- About -->
+    <string name="about_title">Tentang</string>
+    <string name="about_version">Versi 1.2.0</string>
+    <string name="about_desc">Aplikasi survei dan pengukuran jarak/luas berbasis peta. Gunakan GPS, marker, catatan, dan ekspor hasil survei ke CSV / JSON / KML.</string>
+    <string name="about_features_title">Fitur utama:</string>
+    <string name="about_f1">• Ukur jarak (polyline) &amp; luas (polygon)</string>
+    <string name="about_f2">• Undo / Redo &amp; hapus titik</string>
+    <string name="about_f3">• GPS → tambah titik otomatis</string>
+    <string name="about_f4">• Long-press peta → Marker</string>
+    <string name="about_f5">• Tipe peta: Normal / Satelit / Terrain / Hybrid</string>
+    <string name="about_f6">• Satuan: m, km, mi, ft, nmi, yd</string>
+    <string name="about_f7">• Riwayat survei + buka kembali</string>
+    <string name="about_f8">• Ekspor CSV / JSON / KML</string>
+    <string name="about_f9">• Marker &amp; Catatan lokal</string>
+    <string name="about_f10">• Tema Gelap / Terang</string>
+    <string name="about_dev">Developer: MPorT</string>
+    <string name="about_tagline">Offline survey • GPS • Map measurement • Export</string>
+    <string name="about_local_data">Data disimpan lokal di perangkat Anda (Room + DataStore). Tidak ada akun atau sinkronisasi cloud.</string>
+
+    <!-- Privacy -->
+    <string name="privacy_title">Kebijakan Privasi</string>
+    <string name="privacy_updated">Terakhir diperbarui: September 2026</string>
+    <string name="privacy_intro">MPorT Maps menghormati privasi Anda. Aplikasi ini dirancang untuk bekerja secara lokal di perangkat tanpa mengirim data pribadi ke server kami.</string>
+    <string name="privacy_s1">1. Data yang dikumpulkan</string>
+    <string name="privacy_s1_a">• Lokasi GPS: digunakan hanya saat Anda meminta titik GPS atau mengaktifkan \"My Location\" di peta. Lokasi tidak dikirim ke server pihak ketiga oleh aplikasi ini (kecuali melalui layanan Google Maps SDK yang tunduk pada kebijakan Google).</string>
+    <string name="privacy_s1_b">• Survei, marker, dan catatan: disimpan di database lokal (Room) di perangkat Anda. Tidak ada backup otomatis ke cloud.</string>
+    <string name="privacy_s1_c">• Pengaturan (satuan, tipe peta, tema, bahasa): disimpan di DataStore lokal.</string>
+    <string name="privacy_s2">2. Izin yang digunakan</string>
+    <string name="privacy_s2_body">• ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION — untuk menampilkan posisi dan menambah titik dari GPS.\n• INTERNET — untuk memuat tile peta Google Maps (jika API key tersedia).</string>
+    <string name="privacy_s3">3. Berbagi data</string>
+    <string name="privacy_s3_body">Kami tidak menjual, menyewakan, atau membagikan data pribadi Anda. File ekspor (CSV/JSON/KML) hanya dibuat atas permintaan Anda dan disimpan di penyimpanan yang Anda pilih.</string>
+    <string name="privacy_s4">4. Google Maps</string>
+    <string name="privacy_s4_body">Peta disediakan oleh Google Maps SDK. Penggunaan layanan Google tunduk pada Google Privacy Policy dan Terms of Service.</string>
+    <string name="privacy_s5">5. Anak-anak</string>
+    <string name="privacy_s5_body">Aplikasi ini tidak ditujukan untuk anak di bawah 13 tahun dan tidak sengaja mengumpulkan data dari anak-anak.</string>
+    <string name="privacy_s6">6. Perubahan kebijakan</string>
+    <string name="privacy_s6_body">Kami dapat memperbarui kebijakan ini. Versi terbaru akan ditampilkan di halaman ini.</string>
+    <string name="privacy_s7">7. Kontak</string>
+    <string name="privacy_s7_body">Jika ada pertanyaan mengenai privasi, hubungi pengembang MPorT Maps.</string>
+
+    <!-- Misc -->
+    <string name="api_key_ok">Google Maps API key terpasang</string>
+    <string name="api_key_missing">API key belum diisi — isi MAPS_API_KEY di gradle.properties</string>
+    <string name="version_line">MPorT Maps v1.2.0</string>
+
+    <string name="settings_license">Lisensi</string>
+    <string name="settings_security">Keamanan</string>
+
+    <!-- License -->
+    <string name="license_title">Lisensi</string>
+    <string name="license_intro">MPorT Maps disediakan untuk penggunaan survei pribadi maupun profesional. Harap baca ketentuan di bawah ini.</string>
+    <string name="license_s1">1. Pemberian lisensi</string>
+    <string name="license_s1_body">Anda diberikan lisensi non-eksklusif, tidak dapat dipindahtangankan, dan dapat dicabut untuk memasang serta menggunakan aplikasi ini pada perangkat yang Anda miliki atau kendalikan, untuk mengukur jarak dan luas, mengelola marker, catatan, serta mengekspor data survei.</string>
+    <string name="license_s2">2. Kepemilikan</string>
+    <string name="license_s2_body">Seluruh hak, judul, dan kepentingan atas MPorT Maps (termasuk kode, merek, dan aset) tetap milik pengembang (MPorT), kecuali pustaka pihak ketiga dan Google Maps SDK yang tunduk pada lisensi masing-masing.</string>
+    <string name="license_s3">3. Pembatasan</string>
+    <string name="license_s3_body">Anda tidak boleh: merekayasa balik, mendekompilasi, atau membongkar aplikasi (kecuali diizinkan hukum); mendistribusikan ulang, menjual, atau mensublisensikan aplikasi; menghapus pemberitahuan hak cipta; menggunakan aplikasi untuk tujuan melanggar hukum.</string>
+    <string name="license_s4">4. Komponen pihak ketiga</string>
+    <string name="license_s4_body">Aplikasi ini menggunakan komponen open-source dan pihak ketiga termasuk Android Jetpack, Kotlin, Google Maps SDK, dan pustaka terkait. Komponen tersebut tetap di bawah lisensi masing-masing (misalnya Apache 2.0, Google Terms of Service).</string>
+    <string name="license_s5">5. Penafian jaminan</string>
+    <string name="license_s5_body">APLIKASI DISEDIAKAN "SEBAGAIMANA ADANYA" TANPA JAMINAN APA PUN, TERSURAT MAUPUN TERSIRAT, TERMASUK KELAYAKAN UNTUK DIPERDAGANGKAN, KESESUAIAN UNTUK TUJUAN TERTENTU, DAN NON-PELANGGARAN. Hasil survei dan pengukuran bergantung pada akurasi GPS, data peta, dan input pengguna; pengembang tidak bertanggung jawab atas keputusan yang dibuat berdasarkan hasil tersebut.</string>
+    <string name="license_s6">6. Batasan tanggung jawab</string>
+    <string name="license_s6_body">Sejauh diizinkan hukum, pengembang tidak bertanggung jawab atas kerugian tidak langsung, insidental, khusus, atau konsekuensial yang timbul dari penggunaan aplikasi.</string>
+    <string name="license_s7">7. Pengakhiran</string>
+    <string name="license_s7_body">Lisensi ini berakhir secara otomatis jika Anda melanggar ketentuan. Setelah berakhir, Anda harus berhenti menggunakan dan mencopot aplikasi.</string>
+    <string name="license_s8">8. Kontak</string>
+    <string name="license_s8_body">Untuk pertanyaan lisensi, hubungi pengembang MPorT Maps.</string>
+
+    <!-- Security -->
+    <string name="security_title">Keamanan</string>
+    <string name="security_intro">MPorT Maps dirancang dengan fokus privasi dan keamanan data lokal. Berikut cara data dan aplikasi dilindungi.</string>
+    <string name="security_s1">1. Penyimpanan data lokal</string>
+    <string name="security_s1_body">Survei, marker, catatan, dan pengaturan hanya disimpan di perangkat Anda menggunakan database Room dan DataStore Android. Tidak ada akun cloud dan tidak ada unggahan otomatis data survei ke server kami.</string>
+    <string name="security_s2">2. Data lokasi</string>
+    <string name="security_s2_body">Lokasi diakses hanya jika Anda memberikan izin dan saat menggunakan fitur GPS atau My Location. Aplikasi tidak melacak lokasi di latar belakang untuk iklan atau analitik di luar yang mungkin dilakukan Google Maps SDK sesuai kebijakan Google.</string>
+    <string name="security_s3">3. Penggunaan jaringan</string>
+    <string name="security_s3_body">Internet terutama digunakan untuk memuat tile Google Maps (jika API key dikonfigurasi). File ekspor ditulis ke penyimpanan yang Anda pilih; tidak dikirim ke server eksternal oleh aplikasi itu sendiri.</string>
+    <string name="security_s4">4. Izin</string>
+    <string name="security_s4_body">• Lokasi (halus/kasar): diperlukan untuk titik GPS dan posisi peta.\n• Internet: diperlukan untuk tile peta.\nTidak meminta izin kontak, kamera, mikrofon, atau SMS.</string>
+    <string name="security_s5">5. Ekspor</string>
+    <string name="security_s5_body">Ekspor CSV, JSON, dan KML dibuat hanya atas permintaan Anda dan disimpan di bawah kendali Anda (misalnya Downloads). Perlakukan file ekspor sesuai kebijakan data Anda sendiri.</string>
+    <string name="security_s6">6. Pembaruan &amp; integritas</string>
+    <string name="security_s6_body">Pasang aplikasi hanya dari sumber tepercaya. Jaga OS perangkat dan aplikasi tetap diperbarui. Jangan memasang build yang dimodifikasi atau tidak resmi.</string>
+    <string name="security_s7">7. Melaporkan masalah</string>
+    <string name="security_s7_body">Jika menemukan masalah keamanan, hubungi pengembang MPorT Maps dengan detail agar dapat ditindaklanjuti.</string>
+
+</resources>

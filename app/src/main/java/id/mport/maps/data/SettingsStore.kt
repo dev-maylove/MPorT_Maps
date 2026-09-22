@@ -11,22 +11,40 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore("mport_maps_settings")
 
+/** Language preference: SYSTEM follows device, EN, IN */
+enum class AppLanguage(val code: String) {
+    SYSTEM(""),
+    ENGLISH("en"),
+    INDONESIAN("in");
+
+    companion object {
+        fun fromStored(v: String?): AppLanguage = when (v?.lowercase()) {
+            "en" -> ENGLISH
+            "in", "id" -> INDONESIAN
+            else -> SYSTEM
+        }
+    }
+}
+
 data class AppSettings(
     val mapType: Int = 2,          // 1=Normal 2=Satellite 3=Terrain 4=Hybrid
     val unit: UnitMode = UnitMode.METER,
-    val darkTheme: Boolean = true
+    val darkTheme: Boolean = true,
+    val language: AppLanguage = AppLanguage.SYSTEM
 )
 
 class SettingsStore(private val context: Context) {
     private val KEY_MAP = intPreferencesKey("mapType")
     private val KEY_UNIT = stringPreferencesKey("unit")
     private val KEY_THEME = stringPreferencesKey("theme")
+    private val KEY_LANG = stringPreferencesKey("language")
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { prefs ->
         AppSettings(
             mapType = prefs[KEY_MAP] ?: 2,
             unit = UnitMode.fromStored(prefs[KEY_UNIT]),
-            darkTheme = (prefs[KEY_THEME] ?: "DARK") == "DARK"
+            darkTheme = (prefs[KEY_THEME] ?: "DARK") == "DARK",
+            language = AppLanguage.fromStored(prefs[KEY_LANG])
         )
     }
 
@@ -40,5 +58,9 @@ class SettingsStore(private val context: Context) {
 
     suspend fun setDarkTheme(dark: Boolean) {
         context.dataStore.edit { it[KEY_THEME] = if (dark) "DARK" else "LIGHT" }
+    }
+
+    suspend fun setLanguage(lang: AppLanguage) {
+        context.dataStore.edit { it[KEY_LANG] = lang.code }
     }
 }

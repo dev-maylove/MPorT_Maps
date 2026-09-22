@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import id.mport.maps.BuildConfig
+import id.mport.maps.R
 import id.mport.maps.domain.measurement.MeasurementMode
 import id.mport.maps.domain.unit.UnitFormatter
 import id.mport.maps.domain.unit.UnitMode
@@ -207,7 +209,7 @@ fun HomeScreen(
                             onDismissRequest = { showMoreMenu = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Hapus semua titik") },
+                                text = { Text(stringResource(R.string.clear_all_points)) },
                                 onClick = {
                                     vm.clearPoints()
                                     showMoreMenu = false
@@ -217,7 +219,7 @@ fun HomeScreen(
                             )
                             DropdownMenuItem(
                                 text = {
-                                    Text("Satuan: ${unit.label}")
+                                    Text(stringResource(R.string.unit_label, unit.label))
                                 },
                                 onClick = {
                                     // Ubah satuan lewat Setelan → Units
@@ -226,7 +228,7 @@ fun HomeScreen(
                                 leadingIcon = { Icon(Icons.Default.Straighten, null) }
                             )
                             DropdownMenuItem(
-                                text = { Text("Mode: Jarak") },
+                                text = { Text(stringResource(R.string.mode_distance_label)) },
                                 onClick = {
                                     vm.setMode(MeasurementMode.DISTANCE)
                                     showMoreMenu = false
@@ -237,7 +239,7 @@ fun HomeScreen(
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text("Mode: Area") },
+                                text = { Text(stringResource(R.string.mode_area_label)) },
                                 onClick = {
                                     vm.setMode(MeasurementMode.AREA)
                                     showMoreMenu = false
