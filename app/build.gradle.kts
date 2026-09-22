@@ -17,9 +17,11 @@ android {
         versionName = "1.1.1"
         vectorDrawables { useSupportLibrary = true }
 
-        // Maps API key from gradle.properties or default
-        val mapsKey = project.findProperty("MAPS_API_KEY")?.toString()
-            ?: "YOUR_GOOGLE_MAPS_API_KEY"
+        // Maps API key from GitHub Actions or gradle.properties
+        val mapsKey = System.getenv("GOOGLE_MAPS_API_KEY")
+            ?: project.findProperty("MAPS_API_KEY")?.toString()
+            ?: ""
+
         manifestPlaceholders["MAPS_API_KEY"] = mapsKey
     }
 
