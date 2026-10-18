@@ -254,5 +254,4 @@ https://maps.google.com/?q=%4$.6f,%5$.6f</string>
     <string name="share_no_measurement">Tidak ada titik pengukuran untuk dibagikan</string>
     <string name="marker_use_last_point">Marker akan diletakkan di titik pengukuran terakhir</string>
     <string name="marker_need_point">Tambah titik di peta atau long-press untuk menaruh marker</string>
-    <string name="cd_share">Bagikan pengukuran</string>
 </resources>

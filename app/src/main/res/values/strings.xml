@@ -254,5 +254,4 @@ https://maps.google.com/?q=%4$.6f,%5$.6f</string>
     <string name="share_no_measurement">No measurement points to share</string>
     <string name="marker_use_last_point">Marker will be placed at the last measurement point</string>
     <string name="marker_need_point">Add a point on the map or long-press to place a marker</string>
-    <string name="cd_share">Share measurement</string>
 </resources>
