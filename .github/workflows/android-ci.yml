@@ -39,7 +39,7 @@ jobs:
             chmod +x ./gradlew
           else
             echo "gradlew missing — generating wrapper"
-            gradle wrapper --gradle-version 8.11.1
+            gradle wrapper --gradle-version 8.14.6
             chmod +x ./gradlew
           fi
 
