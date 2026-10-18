@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MPorT Maps</string>
-
-    <!-- Bottom navigation -->
     <string name="nav_survey">Survey</string>
     <string name="nav_history">History</string>
     <string name="nav_marker">Marker</string>
     <string name="nav_notes">Notes</string>
     <string name="nav_settings">Settings</string>
-
-    <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_saved_list">Saved List</string>
     <string name="settings_map_type">Map Type</string>
@@ -26,22 +22,16 @@
     <string name="cancel">CANCEL</string>
     <string name="ok">OK</string>
     <string name="back">Back</string>
-
-    <!-- Map types -->
     <string name="map_normal">Normal</string>
     <string name="map_satellite">Satellite</string>
     <string name="map_terrain">Terrain</string>
     <string name="map_hybrid">Hybrid</string>
-
-    <!-- Units (labels already in enum, but for dialog title etc.) -->
     <string name="unit_meter">Meter (m)</string>
     <string name="unit_kilometer">Kilometer (km)</string>
     <string name="unit_mile">Mile (mi)</string>
     <string name="unit_feet">Feet (ft)</string>
     <string name="unit_nautical_mile">Nautical Mile (nmi)</string>
     <string name="unit_yard">Yard (yd)</string>
-
-    <!-- Home / Survey -->
     <string name="mode_distance">Distance</string>
     <string name="mode_area">Area</string>
     <string name="clear_all_points">Clear all points</string>
@@ -55,8 +45,6 @@
     <string name="permission_needed">Location permission required</string>
     <string name="grant_permission">Grant permission</string>
     <string name="maps_key_missing">Maps API key not set — map may be empty</string>
-
-    <!-- History -->
     <string name="history_title">History</string>
     <string name="history_empty">No saved surveys yet</string>
     <string name="open">Open</string>
@@ -65,8 +53,6 @@
     <string name="distance_label">Distance: %1$s</string>
     <string name="area_label">Area: %1$s</string>
     <string name="perimeter_label">Perimeter: %1$s</string>
-
-    <!-- Markers & Notes -->
     <string name="markers_title">Markers</string>
     <string name="markers_empty">No markers yet</string>
     <string name="notes_title">Notes</string>
@@ -77,15 +63,11 @@
     <string name="notes">Notes</string>
     <string name="body">Body</string>
     <string name="save">Save</string>
-
-    <!-- Messages -->
     <string name="gps_failed">GPS could not get location. Make sure GPS is on and location permission is granted.</string>
     <string name="no_points_to_save">No points to save</string>
     <string name="survey_saved">Survey saved</string>
     <string name="survey_opened">Survey opened: %1$s</string>
     <string name="save_failed">Failed to save: %1$s</string>
-
-    <!-- About -->
     <string name="about_title">About</string>
     <string name="about_version">Version 1.2.0</string>
     <string name="about_desc">Map-based survey and distance/area measurement app. Use GPS, markers, notes, and export survey results to CSV / JSON / KML.</string>
@@ -103,8 +85,6 @@
     <string name="about_dev">Developer: MPorT</string>
     <string name="about_tagline">Offline survey • GPS • Map measurement • Export</string>
     <string name="about_local_data">Data is stored locally on your device (Room + DataStore). No account or cloud sync.</string>
-
-    <!-- Privacy -->
     <string name="privacy_title">Privacy Policy</string>
     <string name="privacy_updated">Last updated: September 2026</string>
     <string name="privacy_intro">MPorT Maps respects your privacy. This app is designed to work locally on your device without sending personal data to our servers.</string>
@@ -124,16 +104,11 @@
     <string name="privacy_s6_body">We may update this policy. The latest version will be shown on this page.</string>
     <string name="privacy_s7">7. Contact</string>
     <string name="privacy_s7_body">For privacy questions, contact the MPorT Maps developer.</string>
-
-    <!-- Misc -->
     <string name="api_key_ok">Google Maps API key installed</string>
     <string name="api_key_missing">API key not set — fill MAPS_API_KEY in gradle.properties</string>
     <string name="version_line">MPorT Maps v1.2.0</string>
-
     <string name="settings_license">License</string>
     <string name="settings_security">Security</string>
-
-    <!-- License -->
     <string name="license_title">License</string>
     <string name="license_intro">MPorT Maps is provided for personal and professional survey use. Please read the terms below.</string>
     <string name="license_s1">1. License grant</string>
@@ -152,8 +127,6 @@
     <string name="license_s7_body">This license terminates automatically if you breach these terms. Upon termination you must stop using and uninstall the app.</string>
     <string name="license_s8">8. Contact</string>
     <string name="license_s8_body">For license questions, contact the MPorT Maps developer.</string>
-
-    <!-- Security -->
     <string name="security_title">Security</string>
     <string name="security_intro">MPorT Maps is designed with privacy and local-first security in mind. Below is how your data and the app are protected.</string>
     <string name="security_s1">1. Local data storage</string>
@@ -170,9 +143,6 @@
     <string name="security_s6_body">Install the app only from trusted sources. Keep your device OS and the app updated. Do not install modified or unofficial builds.</string>
     <string name="security_s7">7. Reporting issues</string>
     <string name="security_s7_body">If you discover a security concern, please contact the MPorT Maps developer with details so it can be investigated.</string>
-
-
-    <!-- Home / dialogs -->
     <string name="save_survey_title">Save Survey</string>
     <string name="name">Name</string>
     <string name="add_marker_title">Add Marker</string>
@@ -185,8 +155,6 @@
     <string name="default_marker">Marker</string>
     <string name="survey_distance_default">Distance Survey</string>
     <string name="survey_area_default">Area Survey</string>
-
-    <!-- About app info (card style) -->
     <string name="about_app_info">App Information</string>
     <string name="about_app_name_label">App name</string>
     <string name="about_version_label">Version</string>
@@ -198,20 +166,14 @@
     <string name="about_app_display_name">MPorT Maps</string>
     <string name="about_version_value">1.2.0</string>
     <string name="about_build_value">12</string>
-
-    <!-- Footer -->
     <string name="footer_app_name">MPorT Maps</string>
     <string name="footer_copyright">© 2026 MPorT. All rights reserved.</string>
     <string name="footer_made_with">Made with ❤️ in Kincir Tengah</string>
-
-    <!-- VM messages -->
     <string name="msg_gps_failed">GPS could not get location. Make sure GPS is on and location permission is granted.</string>
     <string name="msg_no_points">No points to save</string>
     <string name="msg_survey_saved">Survey saved</string>
     <string name="msg_survey_opened">Survey opened: %1$s</string>
     <string name="msg_save_failed">Failed to save: %1$s</string>
-
-
     <string name="points_short">%1$d points</string>
     <string name="map_hint">Tap map = measure point  ·  Long-press = marker</string>
     <string name="map_loading">Loading map…</string>
@@ -231,26 +193,18 @@
     <string name="cd_share">Share measurement</string>
     <string name="cd_undo">Undo</string>
     <string name="cd_redo">Redo</string>
-
     <string name="press_back_again_exit">Press back again to exit</string>
-
     <string name="export_failed">Export failed</string>
     <string name="export_saved_downloads">Saved to Downloads/MPorT Maps</string>
     <string name="export_saved_app">Saved to app folder (Downloads/MPorT Maps)</string>
     <string name="cd_menu">More options</string>
     <string name="cd_add">Add</string>
-
     <string name="confirm_delete_title">Delete?</string>
     <string name="confirm_delete_survey">Delete this survey? This cannot be undone.</string>
     <string name="confirm_delete_marker">Delete this marker? This cannot be undone.</string>
     <string name="confirm_delete_note">Delete this note? This cannot be undone.</string>
     <string name="share_measurement">Share measurement</string>
-    <string name="share_measurement_text">MPorT Maps measurement
-Mode: %1$s
-Result: %2$s
-Points: %3$d
-Last point: %4$.6f, %5$.6f
-https://maps.google.com/?q=%4$.6f,%5$.6f</string>
+    <string name="share_measurement_text">MPorT Maps measurement\nMode: %1$s\nResult: %2$s\nPoints: %3$d\nLast point: %4$.6f, %5$.6f\nhttps://maps.google.com/?q=%4$.6f,%5$.6f</string>
     <string name="share_no_measurement">No measurement points to share</string>
     <string name="marker_use_last_point">Marker will be placed at the last measurement point</string>
     <string name="marker_need_point">Add a point on the map or long-press to place a marker</string>

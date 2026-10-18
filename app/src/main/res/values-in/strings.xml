@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MPorT Maps</string>
-
-    <!-- Bottom navigation -->
     <string name="nav_survey">Survey</string>
     <string name="nav_history">Riwayat</string>
     <string name="nav_marker">Marker</string>
     <string name="nav_notes">Catatan</string>
     <string name="nav_settings">Setelan</string>
-
-    <!-- Settings -->
     <string name="settings_title">Pengaturan</string>
     <string name="settings_saved_list">Daftar Tersimpan</string>
     <string name="settings_map_type">Tipe Peta</string>
@@ -26,22 +22,16 @@
     <string name="cancel">BATAL</string>
     <string name="ok">OK</string>
     <string name="back">Kembali</string>
-
-    <!-- Map types -->
     <string name="map_normal">Normal</string>
     <string name="map_satellite">Satelit</string>
     <string name="map_terrain">Medan</string>
     <string name="map_hybrid">Hibrida</string>
-
-    <!-- Units -->
     <string name="unit_meter">Meter (m)</string>
     <string name="unit_kilometer">Kilometer (km)</string>
     <string name="unit_mile">Mil (mi)</string>
     <string name="unit_feet">Kaki (ft)</string>
     <string name="unit_nautical_mile">Mil Laut (nmi)</string>
     <string name="unit_yard">Yard (yd)</string>
-
-    <!-- Home / Survey -->
     <string name="mode_distance">Jarak</string>
     <string name="mode_area">Luas</string>
     <string name="clear_all_points">Hapus semua titik</string>
@@ -55,8 +45,6 @@
     <string name="permission_needed">Izin lokasi diperlukan</string>
     <string name="grant_permission">Berikan izin</string>
     <string name="maps_key_missing">API key Maps belum diisi — peta mungkin kosong</string>
-
-    <!-- History -->
     <string name="history_title">Riwayat</string>
     <string name="history_empty">Belum ada survey tersimpan</string>
     <string name="open">Buka</string>
@@ -65,8 +53,6 @@
     <string name="distance_label">Jarak: %1$s</string>
     <string name="area_label">Luas: %1$s</string>
     <string name="perimeter_label">Keliling: %1$s</string>
-
-    <!-- Markers & Notes -->
     <string name="markers_title">Marker</string>
     <string name="markers_empty">Belum ada marker</string>
     <string name="notes_title">Catatan</string>
@@ -77,15 +63,11 @@
     <string name="notes">Catatan</string>
     <string name="body">Isi</string>
     <string name="save">Simpan</string>
-
-    <!-- Messages -->
     <string name="gps_failed">GPS tidak mendapatkan lokasi. Pastikan GPS aktif &amp; izin lokasi.</string>
     <string name="no_points_to_save">Tidak ada titik untuk disimpan</string>
     <string name="survey_saved">Survey tersimpan</string>
     <string name="survey_opened">Survey dibuka: %1$s</string>
     <string name="save_failed">Gagal menyimpan: %1$s</string>
-
-    <!-- About -->
     <string name="about_title">Tentang</string>
     <string name="about_version">Versi 1.2.0</string>
     <string name="about_desc">Aplikasi survei dan pengukuran jarak/luas berbasis peta. Gunakan GPS, marker, catatan, dan ekspor hasil survei ke CSV / JSON / KML.</string>
@@ -103,8 +85,6 @@
     <string name="about_dev">Developer: MPorT</string>
     <string name="about_tagline">Offline survey • GPS • Map measurement • Export</string>
     <string name="about_local_data">Data disimpan lokal di perangkat Anda (Room + DataStore). Tidak ada akun atau sinkronisasi cloud.</string>
-
-    <!-- Privacy -->
     <string name="privacy_title">Kebijakan Privasi</string>
     <string name="privacy_updated">Terakhir diperbarui: September 2026</string>
     <string name="privacy_intro">MPorT Maps menghormati privasi Anda. Aplikasi ini dirancang untuk bekerja secara lokal di perangkat tanpa mengirim data pribadi ke server kami.</string>
@@ -124,16 +104,11 @@
     <string name="privacy_s6_body">Kami dapat memperbarui kebijakan ini. Versi terbaru akan ditampilkan di halaman ini.</string>
     <string name="privacy_s7">7. Kontak</string>
     <string name="privacy_s7_body">Jika ada pertanyaan mengenai privasi, hubungi pengembang MPorT Maps.</string>
-
-    <!-- Misc -->
     <string name="api_key_ok">Google Maps API key terpasang</string>
     <string name="api_key_missing">API key belum diisi — isi MAPS_API_KEY di gradle.properties</string>
     <string name="version_line">MPorT Maps v1.2.0</string>
-
     <string name="settings_license">Lisensi</string>
     <string name="settings_security">Keamanan</string>
-
-    <!-- License -->
     <string name="license_title">Lisensi</string>
     <string name="license_intro">MPorT Maps disediakan untuk penggunaan survei pribadi maupun profesional. Harap baca ketentuan di bawah ini.</string>
     <string name="license_s1">1. Pemberian lisensi</string>
@@ -152,8 +127,6 @@
     <string name="license_s7_body">Lisensi ini berakhir secara otomatis jika Anda melanggar ketentuan. Setelah berakhir, Anda harus berhenti menggunakan dan mencopot aplikasi.</string>
     <string name="license_s8">8. Kontak</string>
     <string name="license_s8_body">Untuk pertanyaan lisensi, hubungi pengembang MPorT Maps.</string>
-
-    <!-- Security -->
     <string name="security_title">Keamanan</string>
     <string name="security_intro">MPorT Maps dirancang dengan fokus privasi dan keamanan data lokal. Berikut cara data dan aplikasi dilindungi.</string>
     <string name="security_s1">1. Penyimpanan data lokal</string>
@@ -170,9 +143,6 @@
     <string name="security_s6_body">Pasang aplikasi hanya dari sumber tepercaya. Jaga OS perangkat dan aplikasi tetap diperbarui. Jangan memasang build yang dimodifikasi atau tidak resmi.</string>
     <string name="security_s7">7. Melaporkan masalah</string>
     <string name="security_s7_body">Jika menemukan masalah keamanan, hubungi pengembang MPorT Maps dengan detail agar dapat ditindaklanjuti.</string>
-
-
-    <!-- Home / dialogs -->
     <string name="save_survey_title">Simpan Survey</string>
     <string name="name">Nama</string>
     <string name="add_marker_title">Tambah Marker</string>
@@ -185,8 +155,6 @@
     <string name="default_marker">Marker</string>
     <string name="survey_distance_default">Survey Jarak</string>
     <string name="survey_area_default">Survey Area</string>
-
-    <!-- About app info -->
     <string name="about_app_info">Informasi Aplikasi</string>
     <string name="about_app_name_label">Nama aplikasi</string>
     <string name="about_version_label">Versi</string>
@@ -198,20 +166,14 @@
     <string name="about_app_display_name">MPorT Maps</string>
     <string name="about_version_value">1.2.0</string>
     <string name="about_build_value">12</string>
-
-    <!-- Footer -->
     <string name="footer_app_name">MPorT Maps</string>
     <string name="footer_copyright">© 2026 MPorT. All rights reserved.</string>
     <string name="footer_made_with">Made with ❤️ in Kincir Tengah</string>
-
-    <!-- VM messages -->
     <string name="msg_gps_failed">GPS tidak mendapatkan lokasi. Pastikan GPS aktif dan izin lokasi diberikan.</string>
     <string name="msg_no_points">Tidak ada titik untuk disimpan</string>
     <string name="msg_survey_saved">Survey tersimpan</string>
     <string name="msg_survey_opened">Survey dibuka: %1$s</string>
     <string name="msg_save_failed">Gagal menyimpan: %1$s</string>
-
-
     <string name="points_short">%1$d titik</string>
     <string name="map_hint">Ketuk peta = titik ukur  ·  Long-press = marker</string>
     <string name="map_loading">Memuat peta…</string>
@@ -231,26 +193,18 @@
     <string name="cd_share">Bagikan pengukuran</string>
     <string name="cd_undo">Undo</string>
     <string name="cd_redo">Redo</string>
-
     <string name="press_back_again_exit">Tekan kembali lagi untuk keluar</string>
-
     <string name="export_failed">Gagal export</string>
     <string name="export_saved_downloads">Tersimpan di Downloads/MPorT Maps</string>
     <string name="export_saved_app">Tersimpan di folder aplikasi (Downloads/MPorT Maps)</string>
     <string name="cd_menu">Opsi lainnya</string>
     <string name="cd_add">Tambah</string>
-
     <string name="confirm_delete_title">Hapus?</string>
     <string name="confirm_delete_survey">Hapus survey ini? Tindakan ini tidak dapat dibatalkan.</string>
     <string name="confirm_delete_marker">Hapus marker ini? Tindakan ini tidak dapat dibatalkan.</string>
     <string name="confirm_delete_note">Hapus catatan ini? Tindakan ini tidak dapat dibatalkan.</string>
     <string name="share_measurement">Bagikan pengukuran</string>
-    <string name="share_measurement_text">Pengukuran MPorT Maps
-Mode: %1$s
-Hasil: %2$s
-Titik: %3$d
-Titik terakhir: %4$.6f, %5$.6f
-https://maps.google.com/?q=%4$.6f,%5$.6f</string>
+    <string name="share_measurement_text">Pengukuran MPorT Maps\nMode: %1$s\nHasil: %2$s\nTitik: %3$d\nTitik terakhir: %4$.6f, %5$.6f\nhttps://maps.google.com/?q=%4$.6f,%5$.6f</string>
     <string name="share_no_measurement">Tidak ada titik pengukuran untuk dibagikan</string>
     <string name="marker_use_last_point">Marker akan diletakkan di titik pengukuran terakhir</string>
     <string name="marker_need_point">Tambah titik di peta atau long-press untuk menaruh marker</string>

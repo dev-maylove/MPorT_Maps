@@ -54,6 +54,25 @@ jobs:
             echo "No MAPS_API_KEY secret — using placeholder"
           fi
 
+      - name: Validate no duplicate string resources
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          from collections import Counter
+          import sys
+          failed = False
+          for p in Path("app/src/main/res").glob("values*/strings.xml"):
+              names = re.findall(r'name="([^"]+)"', p.read_text(encoding="utf-8"))
+              dups = sorted(n for n, c in Counter(names).items() if c > 1)
+              if dups:
+                  print(f"::error file={p}::Duplicate string resources: {dups}")
+                  failed = True
+              else:
+                  print(f"OK {p}: {len(names)} unique strings")
+          sys.exit(1 if failed else 0)
+          PY
+
       - name: Build debug APK
         run: ./gradlew :app:assembleDebug --stacktrace --no-daemon
 
