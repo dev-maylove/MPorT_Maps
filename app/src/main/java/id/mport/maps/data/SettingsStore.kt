@@ -62,5 +62,25 @@ class SettingsStore(private val context: Context) {
 
     suspend fun setLanguage(lang: AppLanguage) {
         context.dataStore.edit { it[KEY_LANG] = lang.code }
+        // Mirror to SharedPreferences so attachBaseContext can read without runBlocking
+        cacheLanguage(context, lang)
+    }
+
+    companion object {
+        private const val LOCALE_PREFS = "mport_locale_cache"
+        private const val KEY_LANG_CODE = "lang"
+
+        /** Fast, non-blocking language read for Activity.attachBaseContext. */
+        fun readCachedLanguage(context: Context): AppLanguage {
+            val prefs = context.getSharedPreferences(LOCALE_PREFS, Context.MODE_PRIVATE)
+            return AppLanguage.fromStored(prefs.getString(KEY_LANG_CODE, null))
+        }
+
+        fun cacheLanguage(context: Context, lang: AppLanguage) {
+            context.getSharedPreferences(LOCALE_PREFS, Context.MODE_PRIVATE)
+                .edit()
+                .putString(KEY_LANG_CODE, lang.code)
+                .apply()
+        }
     }
 }

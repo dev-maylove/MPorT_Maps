@@ -12,18 +12,14 @@ import id.mport.maps.data.AppLanguage
 import id.mport.maps.data.SettingsStore
 import id.mport.maps.ui.SurveyApp
 import id.mport.maps.viewmodel.SurveyViewModel
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
 
     private var currentLang: AppLanguage = AppLanguage.SYSTEM
 
     override fun attachBaseContext(newBase: Context) {
-        val store = SettingsStore(newBase)
-        val lang = runBlocking {
-            runCatching { store.settings.first().language }.getOrDefault(AppLanguage.SYSTEM)
-        }
+        // SharedPreferences cache — no runBlocking / no DataStore I/O on main thread
+        val lang = SettingsStore.readCachedLanguage(newBase)
         currentLang = lang
         val localized = LocaleHelper.apply(newBase, lang)
         super.attachBaseContext(localized)
@@ -37,8 +33,9 @@ class MainActivity : ComponentActivity() {
             val vm: SurveyViewModel = viewModel()
             val settings by vm.settings.collectAsStateWithLifecycle()
 
-            // When user changes language in Settings, recreate activity
+            // Keep locale cache in sync + recreate when language changes
             LaunchedEffect(settings.language) {
+                SettingsStore.cacheLanguage(this@MainActivity, settings.language)
                 if (settings.language != currentLang) {
                     currentLang = settings.language
                     recreate()

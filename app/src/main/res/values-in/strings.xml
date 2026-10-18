@@ -30,14 +30,14 @@
     <!-- Map types -->
     <string name="map_normal">Normal</string>
     <string name="map_satellite">Satelit</string>
-    <string name="map_terrain">Terrain</string>
-    <string name="map_hybrid">Hybrid</string>
+    <string name="map_terrain">Medan</string>
+    <string name="map_hybrid">Hibrida</string>
 
     <!-- Units -->
     <string name="unit_meter">Meter (m)</string>
     <string name="unit_kilometer">Kilometer (km)</string>
     <string name="unit_mile">Mil (mi)</string>
-    <string name="unit_feet">Kaki (f)</string>
+    <string name="unit_feet">Kaki (ft)</string>
     <string name="unit_nautical_mile">Mil Laut (nmi)</string>
     <string name="unit_yard">Yard (yd)</string>
 
@@ -228,9 +228,31 @@
     <string name="cd_marker">Tambah marker (long-press peta)</string>
     <string name="cd_measure_mode">Mode ukur</string>
     <string name="cd_clear_points">Hapus titik</string>
-    <string name="cd_share">Bagikan lokasi</string>
+    <string name="cd_share">Bagikan pengukuran</string>
     <string name="cd_undo">Undo</string>
     <string name="cd_redo">Redo</string>
 
     <string name="press_back_again_exit">Tekan kembali lagi untuk keluar</string>
+
+    <string name="export_failed">Gagal export</string>
+    <string name="export_saved_downloads">Tersimpan di Downloads/MPorT Maps</string>
+    <string name="export_saved_app">Tersimpan di folder aplikasi (Downloads/MPorT Maps)</string>
+    <string name="cd_menu">Opsi lainnya</string>
+    <string name="cd_add">Tambah</string>
+
+    <string name="confirm_delete_title">Hapus?</string>
+    <string name="confirm_delete_survey">Hapus survey ini? Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="confirm_delete_marker">Hapus marker ini? Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="confirm_delete_note">Hapus catatan ini? Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="share_measurement">Bagikan pengukuran</string>
+    <string name="share_measurement_text">Pengukuran MPorT Maps
+Mode: %1$s
+Hasil: %2$s
+Titik: %3$d
+Titik terakhir: %4$.6f, %5$.6f
+https://maps.google.com/?q=%4$.6f,%5$.6f</string>
+    <string name="share_no_measurement">Tidak ada titik pengukuran untuk dibagikan</string>
+    <string name="marker_use_last_point">Marker akan diletakkan di titik pengukuran terakhir</string>
+    <string name="marker_need_point">Tambah titik di peta atau long-press untuk menaruh marker</string>
+    <string name="cd_share">Bagikan pengukuran</string>
 </resources>

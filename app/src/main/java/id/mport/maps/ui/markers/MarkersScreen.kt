@@ -8,8 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +21,7 @@ import java.util.*
 @Composable
 fun MarkersScreen(padding: PaddingValues, vm: SurveyViewModel) {
     val markers by vm.markers.collectAsStateWithLifecycle()
+    var deleteTarget by remember { mutableStateOf<MarkerEntity?>(null) }
 
     Column(
         modifier = Modifier
@@ -37,10 +37,31 @@ fun MarkersScreen(padding: PaddingValues, vm: SurveyViewModel) {
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 items(markers, key = { it.id }) { marker ->
-                    MarkerCard(marker) { vm.deleteMarker(marker) }
+                    MarkerCard(marker) { deleteTarget = marker }
                 }
             }
         }
+    }
+
+    deleteTarget?.let { marker ->
+        AlertDialog(
+            onDismissRequest = { deleteTarget = null },
+            title = { Text(stringResource(R.string.confirm_delete_title)) },
+            text = { Text(stringResource(R.string.confirm_delete_marker)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        vm.deleteMarker(marker)
+                        deleteTarget = null
+                    }
+                ) { Text(stringResource(R.string.delete)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { deleteTarget = null }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
     }
 }
 

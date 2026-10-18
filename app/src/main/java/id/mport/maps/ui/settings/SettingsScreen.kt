@@ -96,14 +96,14 @@ fun SettingsScreen(
                 SettingsItem(
                     icon = Icons.Default.Map,
                     title = stringResource(R.string.settings_map_type),
-                    subtitle = MapTypeHelper.label(settings.mapType),
+                    subtitle = stringResource(MapTypeHelper.labelRes(settings.mapType)),
                     onClick = { showMapTypeDialog = true }
                 )
                 HorizontalDivider()
                 SettingsItem(
                     icon = Icons.Default.Straighten,
                     title = stringResource(R.string.settings_units),
-                    subtitle = settings.unit.label,
+                    subtitle = stringResource(settings.unit.labelRes),
                     onClick = { showUnitDialog = true }
                 )
                 HorizontalDivider()
@@ -310,7 +310,7 @@ private fun UnitSelectDialog(
                     ) {
                         RadioButton(selected = current == mode, onClick = { onSelect(mode) })
                         Spacer(Modifier.width(8.dp))
-                        Text(mode.label)
+                        Text(stringResource(mode.labelRes))
                     }
                 }
             }

@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,6 +23,7 @@ import java.util.*
 fun NotesScreen(padding: PaddingValues, vm: SurveyViewModel) {
     val notes by vm.notes.collectAsStateWithLifecycle()
     var showAdd by remember { mutableStateOf(false) }
+    var deleteTarget by remember { mutableStateOf<NoteEntity?>(null) }
 
     Column(
         modifier = Modifier
@@ -34,7 +34,7 @@ fun NotesScreen(padding: PaddingValues, vm: SurveyViewModel) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(stringResource(R.string.notes_title), style = MaterialTheme.typography.headlineSmall)
             IconButton(onClick = { showAdd = true }) {
-                Icon(Icons.Default.Add, contentDescription = "Tambah")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.cd_add))
             }
         }
         Spacer(Modifier.height(12.dp))
@@ -43,7 +43,7 @@ fun NotesScreen(padding: PaddingValues, vm: SurveyViewModel) {
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 items(notes, key = { it.id }) { note ->
-                    NoteCard(note) { vm.deleteNote(note) }
+                    NoteCard(note) { deleteTarget = note }
                 }
             }
         }
@@ -55,6 +55,27 @@ fun NotesScreen(padding: PaddingValues, vm: SurveyViewModel) {
             onSave = { title, body ->
                 vm.saveNote(title, body)
                 showAdd = false
+            }
+        )
+    }
+
+    deleteTarget?.let { note ->
+        AlertDialog(
+            onDismissRequest = { deleteTarget = null },
+            title = { Text(stringResource(R.string.confirm_delete_title)) },
+            text = { Text(stringResource(R.string.confirm_delete_note)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        vm.deleteNote(note)
+                        deleteTarget = null
+                    }
+                ) { Text(stringResource(R.string.delete)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { deleteTarget = null }) {
+                    Text(stringResource(R.string.cancel))
+                }
             }
         )
     }
@@ -87,8 +108,18 @@ private fun AddNoteDialog(onDismiss: () -> Unit, onSave: (String, String) -> Uni
         title = { Text(stringResource(R.string.add_note)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text(stringResource(R.string.title)) }, singleLine = true)
-                OutlinedTextField(value = body, onValueChange = { body = it }, label = { Text(stringResource(R.string.body)) }, minLines = 4)
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text(stringResource(R.string.title)) },
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = body,
+                    onValueChange = { body = it },
+                    label = { Text(stringResource(R.string.body)) },
+                    minLines = 4
+                )
             }
         },
         confirmButton = {

@@ -81,6 +81,14 @@ fun HomeScreen(
         vm.consumeFocus()
     }
 
+    // Auto-dismiss status messages after a short delay
+    LaunchedEffect(ui.message) {
+        if (ui.message != null) {
+            kotlinx.coroutines.delay(3500)
+            vm.clearMessage()
+        }
+    }
+
     val mapType = MapTypeHelper.fromId(settings.mapType)
     val unit = settings.unit
     var mapLoaded by remember { mutableStateOf(false) }
@@ -185,13 +193,13 @@ fun HomeScreen(
                             onDismissRequest = { showMapMenu = false }
                         ) {
                             listOf(
-                                1 to "Normal",
-                                2 to "Satellite",
-                                3 to "Terrain",
-                                4 to "Hybrid"
-                            ).forEach { (id, label) ->
+                                1 to R.string.map_normal,
+                                2 to R.string.map_satellite,
+                                3 to R.string.map_terrain,
+                                4 to R.string.map_hybrid
+                            ).forEach { (id, labelRes) ->
                                 DropdownMenuItem(
-                                    text = { Text(label) },
+                                    text = { Text(stringResource(labelRes)) },
                                     onClick = {
                                         vm.setMapType(id)
                                         showMapMenu = false
@@ -223,7 +231,7 @@ fun HomeScreen(
 
                     Box {
                         IconButton(onClick = { showMoreMenu = true }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = "Menu")
+                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.cd_menu))
                         }
                         DropdownMenu(
                             expanded = showMoreMenu,
@@ -240,10 +248,10 @@ fun HomeScreen(
                             )
                             DropdownMenuItem(
                                 text = {
-                                    Text(stringResource(R.string.unit_label, unit.label))
+                                    Text(stringResource(R.string.unit_label, stringResource(unit.labelRes)))
                                 },
                                 onClick = {
-                                    // Ubah satuan lewat Setelan → Units
+                                    // Change unit via Settings → Units
                                     showMoreMenu = false
                                 },
                                 leadingIcon = { Icon(Icons.Default.Straighten, null) }
@@ -412,22 +420,33 @@ fun HomeScreen(
                     if (pt == null) {
                         android.widget.Toast.makeText(
                             context,
-                            context.getString(R.string.share_no_location),
+                            context.getString(R.string.share_no_measurement),
                             android.widget.Toast.LENGTH_SHORT
                         ).show()
                     } else {
+                        val modeLabel = if (ui.mode == MeasurementMode.AREA)
+                            context.getString(R.string.mode_area)
+                        else
+                            context.getString(R.string.mode_distance)
+                        val result = if (ui.mode == MeasurementMode.AREA)
+                            UnitFormatter.area(ui.areaSquareMeters, unit)
+                        else
+                            UnitFormatter.distance(ui.distanceMeters, unit)
                         val body = context.getString(
-                            R.string.share_location_text,
+                            R.string.share_measurement_text,
+                            modeLabel,
+                            result,
+                            ui.points.size,
                             pt.latitude,
                             pt.longitude
                         )
                         val intent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, body)
-                            putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.share_location))
+                            putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.share_measurement))
                         }
                         context.startActivity(
-                            Intent.createChooser(intent, context.getString(R.string.share_location))
+                            Intent.createChooser(intent, context.getString(R.string.share_measurement))
                         )
                     }
                 },
@@ -437,7 +456,18 @@ fun HomeScreen(
             ToolFab(
                 icon = Icons.Default.PushPin,
                 contentDescription = stringResource(R.string.cd_marker),
-                onClick = { /* hint: long-press map */ },
+                onClick = {
+                    val last = ui.points.lastOrNull()
+                    if (last != null) {
+                        showMarkerDialog = LatLng(last.latitude, last.longitude)
+                    } else {
+                        android.widget.Toast.makeText(
+                            context,
+                            context.getString(R.string.marker_need_point),
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
                 containerColor = Color(0xFFFFEB3B),
                 contentColor = Color(0xFF212121)
             )

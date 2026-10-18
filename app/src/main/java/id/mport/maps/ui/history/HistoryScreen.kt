@@ -35,6 +35,7 @@ fun HistoryScreen(
     val surveys by vm.surveys.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var exportTarget by remember { mutableStateOf<SurveyEntity?>(null) }
+    var deleteTarget by remember { mutableStateOf<SurveyEntity?>(null) }
 
     Column(
         modifier = Modifier
@@ -51,7 +52,7 @@ fun HistoryScreen(
                 items(surveys, key = { it.id }) { survey ->
                     SurveyCard(
                         survey = survey,
-                        onDelete = { vm.deleteSurvey(survey) },
+                        onDelete = { deleteTarget = survey },
                         onRestore = {
                             vm.restoreSurvey(survey)
                             onOpenSurvey()
@@ -61,6 +62,27 @@ fun HistoryScreen(
                 }
             }
         }
+    }
+
+    deleteTarget?.let { survey ->
+        AlertDialog(
+            onDismissRequest = { deleteTarget = null },
+            title = { Text(stringResource(R.string.confirm_delete_title)) },
+            text = { Text(stringResource(R.string.confirm_delete_survey)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        vm.deleteSurvey(survey)
+                        deleteTarget = null
+                    }
+                ) { Text(stringResource(R.string.delete)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { deleteTarget = null }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
     }
 
     exportTarget?.let { survey ->
@@ -90,9 +112,10 @@ fun HistoryScreen(
                     else -> false
                 }
                 val msg = when {
-                    !ok -> "Gagal export"
-                    android.os.Build.VERSION.SDK_INT >= 29 -> "Tersimpan di Downloads/MPorT Maps"
-                    else -> "Tersimpan di folder aplikasi (Downloads/MPorT Maps)"
+                    !ok -> context.getString(R.string.export_failed)
+                    android.os.Build.VERSION.SDK_INT >= 29 ->
+                        context.getString(R.string.export_saved_downloads)
+                    else -> context.getString(R.string.export_saved_app)
                 }
                 Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                 exportTarget = null
